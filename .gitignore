@@ -129,10 +129,13 @@ dmypy.json
 .pyre/
 
 
-data/*.csv
+data/
 models/*.sav
 mlruns
 models/*
 
 #config file has sensitive data
 .mlflow_uri
+
+# MacOS specific files
+.DS_Store
