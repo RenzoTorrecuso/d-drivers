@@ -1,4 +1,4 @@
-## For explanations see /notebooks/Cleaning-categorising-katja.ipynb
+## For explanations see ./notebooks/Cleaning-categorising-katja.ipynb
 
 import pandas as pd
 
@@ -15,7 +15,7 @@ df2.columns = [col.lower() for col in df2.columns]
 df1.rename({
            #'impressions': 'page_impressions',
            'page_efahrer_id': 'page_id',
-           'published_at': 'publishing_date',
+           'published_at': 'publish_date',
            'page_canonical_url': 'url',
            'page_author': 'authors', 
             }, axis=1, inplace=True)
@@ -23,24 +23,33 @@ df1.rename({
 df2.rename({
            'impressions': 'page_impressions',
            'page_efahrer_id': 'page_id',
-           'published_at': 'publishing_date',
+           'published_at': 'publish_date',
            'page_canonical_url': 'url',
            'page_author': 'authors', 
             }, axis=1, inplace=True)
 
 # Eliminate mistakes from the table
-
 df1.drop(78658, inplace=True)
 df2.drop(40600, inplace=True)
 
-# Merging
+### Merging ###
+
 # Using the `left` merging: we already know that `df1` is malformatted
 key_columns = ['page_id', 'date', 'url', 'authors', 'word_count']
 df = pd.merge(left=df2, right=df1, on=key_columns, how='left') 
 
+### Imputing ###
+df = df.sort_values(['page_id', 'date', 'publishing_date', 'url'])\
+    .reset_index(drop=False)
+df.rename({'index': 'old_index'}, axis=1, inplace=True)
+
+
 ### Including the scraped data ###
+#TODO
 
+### Imputing ###
+#TODO
 
-# Writing to the file
+### Writing to the file ###
 
 df.to_csv('./data/full_data.csv')
