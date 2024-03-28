@@ -4,7 +4,7 @@ import pandas as pd
 
 # Read part of the malformatted file:
 df1 = pd.read_excel('../data/data_d-drivers_2024-03-24.xlsx', sheet_name='data',
-                    use_cols=['PAGE_EFAHRER_ID', 'DATE', 'PAGE_CANONICAL_URL', 'PAGE_AUTHOR', 'WORD_COUNT', 'CLICKOUTS']
+                    usecols=['PAGE_EFAHRER_ID', 'DATE', 'PAGE_CANONICAL_URL', 'PAGE_AUTHOR', 'WORD_COUNT', 'CLICKOUTS']
                     )
 #Read everything from the new file:
 df2 = pd.read_excel('../data/data_d-drivers_2024-03-26.xlsx', sheet_name='data')
