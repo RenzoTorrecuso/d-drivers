@@ -15,4 +15,4 @@ pycaret==3.3.0
 openpyxl==3.1.2
 plotly==5.20.0
 beautifulsoup4==4.12.3
-missingno
+missingno==0.5.2
