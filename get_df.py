@@ -5,12 +5,14 @@ import pandas as pd
 
 # Read part of the malformatted file:
 print('=== This is the script that combines and tidies up the raw data ===')
-print('Reading the first file')
+print('The run should take approx. 30 seconds.')
+print()
+print('Reading the first file...')
 
 df1 = pd.read_excel('data/data_d-drivers_2024-03-24.xlsx', sheet_name='data',
                     usecols=['PAGE_EFAHRER_ID', 'DATE', 'PAGE_CANONICAL_URL', 'PAGE_AUTHOR', 'WORD_COUNT', 'CLICKOUTS']
                     )
-print('Reading the second file')
+print('Reading the second file...')
 #Read everything from the new file:
 df2 = pd.read_excel('data/data_d-drivers_2024-03-26.xlsx', sheet_name='data')
 
@@ -63,35 +65,73 @@ df = df[['old_index', 'page_id', 'date', 'publish_date', 'word_count',
 
 ### Imputing ###
 # Filling in missing publishing dates: 
-# First, we assume that when the current `date` precedes the published_date
+# First, we assume that when the current `date` precedes the publish_date
 # the article was initially published long ago, where "long ago" is 1. Jan 2018
 # and today it has been scheduled for an update
-df.loc[df.date < df.publishing_date, 'publishing_date'] = pd.Timestamp('2018-01-01 00:00:00')
+df.loc[df.date < df.publish_date, 'publish_date'] = pd.Timestamp('2018-01-01 00:00:00')
 
 # second, we assume that whern there is date of publication at all, 
 # the articles were published on 1. Jan 2018 (Roughly 33% of all articles)
 
 versions = df.groupby(['page_id'], as_index=False, sort=True)[
-    ['page_id', 'date', 'publishing_date', 'word_count']
+    ['page_id', 'date', 'publish_date', 'word_count']
     ].ffill()
 # which articles don't have the publishing date?
-no_publ_date = versions[versions.publishing_date.isna()].page_id.unique()
+no_publ_date = versions[versions.publish_date.isna()].page_id.unique()
 
-df.loc[df.page_id.isin(no_publ_date), 'publishing_date'] = pd.Timestamp('2018-01-01 00:00:00')
+df.loc[df.page_id.isin(no_publ_date), 'publish_date'] = pd.Timestamp('2018-01-01 00:00:00')
 # Forward-filling the word count and publishing dates for each article.
 # !! Assuming that when the word counts do not change unless otherwise specified !! 
 versions2 = df.groupby(['page_id'], as_index=False, sort=True)[
-    ['page_id', 'date', 'publishing_date', 'word_count']
+    ['page_id', 'date', 'publish_date', 'word_count']
     ].ffill().drop_duplicates()
 
 # merging the imputed columns back into the df
-df_imputed = pd.merge(df[df.columns.drop('publishing_date').drop('word_count')], # drop the non-imputed columns
+df_imputed = pd.merge(df[df.columns.drop('publish_date').drop('word_count')], # drop the non-imputed columns
                       versions2,
                       on=['page_id', 'date'], how='left')
 
+df_imputed = df_imputed.sort_values(['page_id', 'date', 'publish_date']) # just in case, should be already sorted
+
+df_imputed['word_count'] = df_imputed.groupby(['page_id', 'date'])['word_count'].ffill()
+
+# Impute the still missing word counts with 0
+# -> In the future: take the value of the `word count (scraped)` 
+# or the mean value for the given category! 
+df_imputed['word_count'] = df_imputed['word_count'].fillna(0)
+
+df_imputed['publish_date'] = df_imputed.groupby(['page_id', 'date'])['publish_date'].ffill()
+df_imputed['publish_date'] = df_imputed.groupby(['page_id'])['publish_date'].ffill()
+
+### Version count ###
+print('''Calculating version IDs
+      Hint: version changes when any of the folowing change: word count, publish_date or the authors''')
+
+temp = df_imputed[['page_id', 'word_count', 'publish_date', 'authors']].drop_duplicates()
+temp = temp.fillna({'word_count': 0, 'publish_date': pd.Timestamp('2018-01-01 00:00')})
+temp = temp.drop_duplicates()
+temp = temp.sort_values('publish_date')
+
+wc_versions = temp.groupby('page_id')['word_count'].transform(lambda x: pd.factorize(x)[0])
+publish_versions = temp.groupby('page_id')['publish_date'].transform(lambda x: pd.factorize(x)[0])
+authors_versions = temp.groupby('page_id')['authors'].transform(lambda x: pd.factorize(x)[0])
+
+version_count = 10000*wc_versions + 1000*publish_versions + 1*authors_versions
+temp['ver_id_wc'] = wc_versions
+temp['ver_id_pub'] = publish_versions
+temp['ver_id_auth'] = authors_versions
+temp['version_id_raw'] = version_count
+temp['version_id'] = temp.groupby('page_id')['version_id_raw'].transform(lambda x: pd.factorize(x)[0])
+
+df_imputed = pd.merge(df_imputed, temp.drop(['ver_id_wc', 'ver_id_pub', 'ver_id_auth', 'version_id_raw'], axis=1),
+         on=['page_id', 'word_count', 'publish_date', 'authors'],
+         how='left')
+
 ### Including the scraped data ###
 # THANKS @CLARA 
-df_scraped = pd.read_csv('../data/scraping_no_duplicates.csv')
+print('Merging with the scraped data...')
+
+df_scraped = pd.read_csv('data/scraping_no_duplicates.csv')
 df_scraped.columns = [col.lower() for col in df_scraped.columns]
 
 df_scraped.rename({
@@ -103,8 +143,8 @@ df_scraped.rename({
            'current_title': 'h1'
             }, axis=1, inplace=True)
 
-col_to_merge = ['page_id', 'url']
-df_full = pd.merge(left=df_imputed, right=df_scraped, on=col_to_merge, how='left')
+merge_keys = ['page_id', 'url']
+df_full = pd.merge(left=df_imputed, right=df_scraped, on=merge_keys, how='left')
 # May drop some columns
 #df_full = df_full.drop(['old_index'], axis=1)
 
@@ -112,24 +152,5 @@ df_full = pd.merge(left=df_imputed, right=df_scraped, on=col_to_merge, how='left
 print('Writing the final data frame to file')
 df_full.to_csv('./data/full_data.csv', encoding='utf-8', index=False)
 print('The full dataframe is saved as ./data/full_data.csv')
-
-# User side features: those which the reader sees
-# user_side_features = ['page_id', 'date', 'publish_date', 'word_count', 'words_scraped', 
-#                          'page_title', 'page_name', 'title', 'h1', 'authors',  
-#                          'classification_product', 'classification_type']
-
-# [['page_id', 'date', 'publish_date', 'word_count', 'words_scraped', 
-                        #  'page_title', 'page_name', 'title', 'h1', 'authors', 'video_play', 
-                        #  'classification_product', 'classification_type', 
-                        #  'page_impressions', 'clickouts',
-                        #  'external_clicks', 'external_impressions']]
-#df_eda_user = df_full.groupby(user_side_features)
-
-#df_eda_user.to_csv('./data/data_eda_user-side.csv', encoding='utf-8', index=False)
-#print('The dataframe for pages with a few variations is saved as ./data/data_eda_static.csv')
-
-#df_full[['page_id']].to_csv('./data/data_eda_static.csv', encoding='utf-8', index=False)
-#print('The dataframe for pages with a few variations is saved as ./data/data_eda_static.csv')
-
 
 print('Processing complete')
