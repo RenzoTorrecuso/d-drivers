@@ -4,7 +4,7 @@ import pandas as pd
 ### from timeit import timeit
 
 # Read part of the malformatted file:
-print('=== This is the script that combines and tidies up the raw data ===')
+print('======== This is the script that combines and tidies up the raw data ========')
 print('The run should take approx. 30 seconds.')
 print()
 print('Reading the first file...')
@@ -16,7 +16,7 @@ print('Reading the second file...')
 #Read everything from the new file:
 df2 = pd.read_excel('data/data_d-drivers_2024-03-26.xlsx', sheet_name='data')
 
-print('Reading complete. \n Cleaning up the dataframes...')
+print('Reading complete. \nCleaning up the dataframes...')
 df1.columns = [col.lower() for col in df1.columns]
 df2.columns = [col.lower() for col in df2.columns]
 
@@ -104,8 +104,8 @@ df_imputed['publish_date'] = df_imputed.groupby(['page_id', 'date'])['publish_da
 df_imputed['publish_date'] = df_imputed.groupby(['page_id'])['publish_date'].ffill()
 
 ### Version count ###
-print('''Calculating version IDs
-      Hint: version changes when any of the folowing change: word count, publish_date or the authors''')
+print('''Calculating version IDs...
+     ->  Hint: version changes when any of the folowing change: word count, publish_date or the authors''')
 
 temp = df_imputed[['page_id', 'word_count', 'publish_date', 'authors']].drop_duplicates()
 temp = temp.fillna({'word_count': 0, 'publish_date': pd.Timestamp('2018-01-01 00:00')})
@@ -157,8 +157,8 @@ df_full = df_full[['old_index', 'page_id', 'date', 'url', 'version_id', 'publish
        'clickouts', 'external_clicks', 'external_impressions']]
 
 ### Writing to the file ###
-print('Writing the final data frame to file')
+print('Writing the final data frame to file...')
 df_full.to_csv('./data/full_data.csv', encoding='utf-8', index=False)
 print('The full dataframe is saved as ./data/full_data.csv')
 
-print('Processing complete')
+print('======== Processing complete ========')
