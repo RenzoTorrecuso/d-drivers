@@ -148,6 +148,14 @@ df_full = pd.merge(left=df_imputed, right=df_scraped, on=merge_keys, how='left')
 # May drop some columns
 #df_full = df_full.drop(['old_index'], axis=1)
 
+### Final touch
+df_full = df_full[['old_index', 'page_id', 'date', 'url', 'version_id', 'publish_date',
+       'word_count', 'words_scraped', 'classification_product', 'classification_type', 
+       'page_name', 'authors', 'author_scraped',
+       'title', 'h1', 'abstract', 'last_update', 'image_url',
+       'daily_likes', 'daily_dislikes', 'video_play', 'page_impressions',
+       'clickouts', 'external_clicks', 'external_impressions']]
+
 ### Writing to the file ###
 print('Writing the final data frame to file')
 df_full.to_csv('./data/full_data.csv', encoding='utf-8', index=False)
