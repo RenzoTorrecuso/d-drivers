@@ -115,16 +115,13 @@ df_scraped.rename({
            #'impressions': 'page_impressions',
            'words': 'words_scraped',
            'page_efahrer_id': 'page_id',
-           #'page_canonical_url': 'url',
+           'page_canonical_url': 'url',
            'author': 'author_scraped',
            'current_title': 'h1'
             }, axis=1, inplace=True)
 
-################################
-### tbd: page_id only or page_id & url?###
-################################
-merge_keys = ['page_id']
-df_full = pd.merge(left=df_imputed, right=df_scraped, on=merge_keys, how='left')
+merge_keys = ['page_id', 'url']
+df_full = pd.merge(left=df_versions, right=df_scraped, on=merge_keys, how='left')
 # May drop some columns
 #df_full = df_full.drop(['old_index'], axis=1)
 
@@ -136,4 +133,9 @@ df_full = df_full[['old_index', 'page_id', 'date', 'url', 'version_id', 'publish
        'daily_likes', 'daily_dislikes', 'video_play', 'page_impressions',
        'clickouts', 'external_clicks', 'external_impressions']]
 
+### Writing to the file ###
+print('Writing the final data frame to file...')
+df_full.to_csv('./data/full_data.csv', encoding='utf-8', index=False)
+print('The full dataframe is saved as ./data/full_data.csv')
 
+print('======== Processing complete ========')
