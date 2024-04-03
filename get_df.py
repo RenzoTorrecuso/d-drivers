@@ -56,7 +56,7 @@ df.rename({'index': 'old_index'}, axis=1, inplace=True)
 
 # reshuffling columns
 df = df[['old_index', 'page_id', 'date', 'publish_date', 'word_count',
-         # 'publish_date_equal_to_date', # we don't need this one anymore (and never needed?)
+       'publish_date_equal_to_date', # we don't need this one anymore (and never needed?)
        'url', 'page_name', 'classification_product', 'classification_type',
        'title', 'authors', 'daily_likes', 'daily_dislikes', 
        'video_play', 'page_impressions', 'clickouts', 
@@ -64,32 +64,8 @@ df = df[['old_index', 'page_id', 'date', 'publish_date', 'word_count',
         ]]
 
 ### Imputing ###
-# Filling in missing publishing dates: 
-# First, we assume that when the current `date` precedes the publish_date
-# the article was initially published long ago, where "long ago" is 1. Jan 2018
-# and today it has been scheduled for an update
-df.loc[df.date < df.publish_date, 'publish_date'] = pd.Timestamp('2018-01-01 00:00:00')
 
-# second, we assume that whern there is date of publication at all, 
-# the articles were published on 1. Jan 2018 (Roughly 33% of all articles)
-
-versions = df.groupby(['page_id'], as_index=False, sort=True)[
-    ['page_id', 'date', 'publish_date', 'word_count']
-    ].ffill()
-# which articles don't have the publishing date?
-no_publ_date = versions[versions.publish_date.isna()].page_id.unique()
-
-df.loc[df.page_id.isin(no_publ_date), 'publish_date'] = pd.Timestamp('2018-01-01 00:00:00')
-# Forward-filling the word count and publishing dates for each article.
-# !! Assuming that when the word counts do not change unless otherwise specified !! 
-versions2 = df.groupby(['page_id'], as_index=False, sort=True)[
-    ['page_id', 'date', 'publish_date', 'word_count']
-    ].ffill().drop_duplicates()
-
-# merging the imputed columns back into the df
-df_imputed = pd.merge(df[df.columns.drop('publish_date').drop('word_count')], # drop the non-imputed columns
-                      versions2,
-                      on=['page_id', 'date'], how='left')
+df_imputed = df.copy()## Placeholder
 
 df_imputed = df_imputed.sort_values(['page_id', 'date', 'publish_date']) # just in case, should be already sorted
 
@@ -102,13 +78,14 @@ df_imputed['word_count'] = df_imputed['word_count'].fillna(0)
 
 df_imputed['publish_date'] = df_imputed.groupby(['page_id', 'date'])['publish_date'].ffill()
 df_imputed['publish_date'] = df_imputed.groupby(['page_id'])['publish_date'].ffill()
+df_imputed['publish_date'] = df_imputed['publish_date'].fillna(pd.Timestamp('2018-01-01 00:00'))
 
 ### Version count ###
 print('''Calculating version IDs...
      ->  Hint: version changes when any of the folowing change: word count, publish_date or the authors''')
 
-temp = df_imputed[['page_id', 'word_count', 'publish_date', 'authors']].drop_duplicates()
-temp = temp.fillna({'word_count': 0, 'publish_date': pd.Timestamp('2018-01-01 00:00')})
+temp = df_imputed[['page_id', 'word_count', 'publish_date', 'authors']].drop_duplicates().copy()
+#temp = temp.fillna({'word_count': 0, 'publish_date': pd.Timestamp('2018-01-01 00:00')})
 temp = temp.drop_duplicates()
 temp = temp.sort_values('publish_date')
 
@@ -123,7 +100,7 @@ temp['ver_id_auth'] = authors_versions
 temp['version_id_raw'] = version_count
 temp['version_id'] = temp.groupby('page_id')['version_id_raw'].transform(lambda x: pd.factorize(x)[0])
 
-df_imputed = pd.merge(df_imputed, temp.drop(['ver_id_wc', 'ver_id_pub', 'ver_id_auth', 'version_id_raw'], axis=1),
+df_versions = pd.merge(left=df_imputed, right=temp.drop(['ver_id_wc', 'ver_id_pub', 'ver_id_auth', 'version_id_raw'], axis=1),
          on=['page_id', 'word_count', 'publish_date', 'authors'],
          how='left')
 
@@ -143,6 +120,9 @@ df_scraped.rename({
            'current_title': 'h1'
             }, axis=1, inplace=True)
 
+################################
+### tbd: page_id only or page_id & url?###
+################################
 merge_keys = ['page_id']
 df_full = pd.merge(left=df_imputed, right=df_scraped, on=merge_keys, how='left')
 # May drop some columns
