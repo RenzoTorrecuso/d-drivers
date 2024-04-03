@@ -28,7 +28,7 @@ def extract_last_part(url):
 df.loc[:, 'url_text'] = df['url'].apply(extract_last_part)
 
 # # URL keywords into list 
-# tbd
+# tbdg
 
 # # drop duplicates
 # tbd
