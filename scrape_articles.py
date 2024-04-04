@@ -14,6 +14,8 @@ folder_path = './data/pages'
 # Initialize a list to hold the scraped data
 scraped_data = []
 
+### SCRAPING THE DATA ###
+
 print('Starting the scraping process ...')
 
 # Iterate over HTML files in the folder
@@ -38,7 +40,7 @@ for filename in os.listdir(folder_path):
 
                 # Extract image size
                 page_img_size = None
-                if media_type == 'img-wrapper':
+                if 'img-wrapper' in media_type or ['image-gallery', 'mb-lg-7', 'mb-8'] in media_type:
                     page_img_size = soup.find(id='content').find('article').find('div', {'class':'img-wrapper'}).find('img').get('sizes')
 
                 # Extract user-visible data
@@ -63,7 +65,7 @@ for filename in os.listdir(folder_path):
                 })
 
             i+=1
-            if i==10:
+            if i==20:
                 scraped_df = pd.DataFrame(scraped_data)
                 scraped_df.to_csv('./data/temp_scraped.csv')
                 i=0
@@ -77,20 +79,24 @@ scraped_df = pd.DataFrame(scraped_data)
 
 print('Scraping completed')
 
-# processing of the scraped data
-scraped_df['page_ID'] = scraped_df['filename'].apply(lambda x: x.split('.')[0])
+### BEAUTIFYING THE DATA ###
+
+# Extract page_ID out of filename
+scraped_df['page_id'] = scraped_df['filename'].apply(lambda x: x.split('.')[0])
 scraped_df.drop('filename', axis=1, inplace=True)
 
+# Get rid of '- EFAHRER.com' at the end of each title
 scraped_df['meta_title'] = scraped_df['meta_title'].apply(lambda x: x.rsplit('-', 1)[0])
 
-# Apply strip() method to remove leading and trailing whitespaces from all string columns
+# Clean data
 scraped_df = scraped_df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-#scraped_df['date'] = pd.to_datetime(scraped_df['date'], format='%d. %B %Y')
-scraped_df['date'] = pd.to_datetime(scraped_df['date'], errors='coerce')
-
+# Extract img size number
 scraped_df['page_img_size'] = scraped_df['page_img_size'].apply(lambda x: x.split(',')[0] if x else None)
 scraped_df['page_img_size'] = scraped_df['page_img_size'].apply(lambda x: x.split(')')[-1] if x else None)
+
+# Reorder columns
+scraped_df = scraped_df[['page_id','url','h1','author','date','abstract','meta_title','meta_description','meta_image_url','media_type','page_img_size']]
 
 print('Saving final csv as ./data/full_scraped.csv')
 
