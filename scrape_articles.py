@@ -48,6 +48,14 @@ for filename in os.listdir(folder_path):
                 author = soup.find(id='content').find('article').find('h4').find('a').text
                 date = soup.find(id='content').find('article').find('h4').find('span').text
                 abstract = soup.find(id='content').find('article').find('p').text
+                main_article = soup.find('article', class_='single-article')
+                if main_article:
+                    # Extract the text content of the main text body
+                    main_text = main_article.get_text(separator=' ', strip=True)
+                    # Calculate the length of the main text body
+                    main_text_length = len(main_text.split())
+                else:
+                    print(f"{filename}: Main text body element not found.")
 
                 # Append scraped data to the list
                 scraped_data.append({
@@ -61,11 +69,12 @@ for filename in os.listdir(folder_path):
                     'h1': h1,
                     'author': author,
                     'date': date,
-                    'abstract': abstract
+                    'abstract': abstract,
+                    'main_text_length': main_text_length
                 })
 
             i+=1
-            if i==20:
+            if i==30:
                 scraped_df = pd.DataFrame(scraped_data)
                 scraped_df.to_csv('./data/temp_scraped.csv')
                 i=0
@@ -96,7 +105,7 @@ scraped_df['page_img_size'] = scraped_df['page_img_size'].apply(lambda x: x.spli
 scraped_df['page_img_size'] = scraped_df['page_img_size'].apply(lambda x: x.split(')')[-1] if x else None)
 
 # Reorder columns
-scraped_df = scraped_df[['page_id','url','h1','author','date','abstract','meta_title','meta_description','meta_image_url','media_type','page_img_size']]
+scraped_df = scraped_df[['page_id','url','h1','author','date','abstract','main_text_length','meta_title','meta_description','meta_image_url','media_type','page_img_size']]
 
 print('Saving final csv as ./data/full_scraped.csv')
 
