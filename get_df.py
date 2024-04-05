@@ -63,6 +63,8 @@ df = df[['old_index', 'page_id', 'date', 'publish_date', 'word_count',
        'external_clicks', 'external_impressions'
         ]]
 
+# Drop negative and too large likes and dislikes
+
 ### Imputing ###
 
 df_imputed = df.copy()## Placeholder
@@ -70,6 +72,7 @@ df_imputed = df.copy()## Placeholder
 df_imputed = df_imputed.sort_values(['page_id', 'date', 'publish_date']) # just in case, should be already sorted
 
 df_imputed['word_count'] = df_imputed.groupby(['page_id', 'date'])['word_count'].ffill()
+df_imputed['word_count'] = df_imputed.groupby(['page_id'])['word_count'].ffill()
 
 # Impute the still missing word counts with 0
 # -> In the future: take the value of the `word count (scraped)` 
@@ -79,6 +82,7 @@ df_imputed['word_count'] = df_imputed['word_count'].fillna(0)
 df_imputed['publish_date'] = df_imputed.groupby(['page_id', 'date'])['publish_date'].ffill()
 df_imputed['publish_date'] = df_imputed.groupby(['page_id'])['publish_date'].ffill()
 df_imputed['publish_date'] = df_imputed['publish_date'].fillna(pd.Timestamp('2018-01-01 00:00'))
+# df_imputed.loc[df_imputed.publish_date != df_imputed.date] = min(df_imputed.publish_date, df_imputed.date)
 
 ### Version count ###
 print('''Calculating version IDs...
