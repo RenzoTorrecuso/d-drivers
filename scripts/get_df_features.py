@@ -80,7 +80,7 @@ df_full = df_full[['page_id', 'version_id', 'date', 'publish_date',
 
 ### Writing to the file ###
 print('Writing the final data frame to file...')
-df_full.to_csv('../data/df_features.csv', encoding='utf-8', index=False)
+df_full.to_csv('../data/data_features.csv', encoding='utf-8', index=False)
 print('The full dataframe with features is saved as ./data/df_features.csv')
 
 print('======== Processing complete ========')
