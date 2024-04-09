@@ -2,7 +2,7 @@ import pandas as pd
 
 df = pd.read_csv('data/merged_data.csv', parse_dates=['date', 'publish_date'])
 
-print('! The end dataframe should have this many rows:', df.drop_duplicates(['page_id', 'date']).shape)
+print('! The end dataframe should have this many rows:', df.drop_duplicates(['page_id', 'date']).shape[0])
 print('-> The dataframe has this many rows:', df.shape[0])
 
 # ------------------------------------------------------------ #
@@ -156,7 +156,7 @@ unique_cols = list(df.columns.drop(still_duplicated))
 
 df = df.drop_duplicates(unique_cols)
 
-diff = df[['page_id', 'date']].shape[0] - 108343
+diff = df[['page_id', 'date']].shape[0] - 107816
 if diff == 0:
         print('The dataframe length is correct!')
 else:
