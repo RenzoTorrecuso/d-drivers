@@ -46,8 +46,10 @@ for filename in os.listdir(folder_path):
                 # Extract user-visible data
                 h1 = soup.find('h1').text
                 author = soup.find(id='content').find('article').find('h4').find('a').text
-                date = soup.find(id='content').find('article').find('h4').find('span').text
+                date = soup.find(id='content').find('article').find('h4').find('span').get_text(separator=' ', strip=True)
                 abstract = soup.find(id='content').find('article').find('p').text
+                # removing line breaks
+                # abstract = 
                 main_article = soup.find('article', class_='single-article')
                 if main_article:
                     # Extract the text content of the main text body
@@ -110,6 +112,6 @@ scraped_df = scraped_df[['page_id','url','h1','author','date_scraped','abstract'
 print('Saving final csv as data/df_scraped.csv')
 
 # Write the DataFrame to a CSV file
-scraped_df.to_csv('data/data_scraped.csv', index=False)
+scraped_df.to_csv('data/data_scraped.csv', index=False, lineterminator='')
 
 print('======== Processing complete ========')

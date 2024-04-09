@@ -2,12 +2,12 @@
 
 import pandas as pd
 
-# Read part of the malformatted file:
 print('======== This is the script that combines and tidies up the raw data ========')
 print('The run should take approx. 30 seconds.')
 print()
 print('Reading the first data delivery...')
 
+# Read part of the malformatted file:
 df1 = pd.read_excel('data/data_d-drivers_2024-03-24.xlsx', sheet_name='data',
                     usecols=['PAGE_EFAHRER_ID', 'DATE', 'PAGE_CANONICAL_URL', 'PAGE_AUTHOR', 'WORD_COUNT', 'CLICKOUTS'],
                     #parse_dates=['DATE']
@@ -87,7 +87,7 @@ df_imputed['publish_date'] = df_imputed['publish_date'].fillna(pd.Timestamp('201
 # df_imputed.loc[df_imputed.publish_date != df_imputed.date] = min(df_imputed.publish_date, df_imputed.date)
 
 ### Drop the articles with no metrics at all (enough to check external_clicks)
-### As well as the 
+### As well as the rows with no targets
 
 df_imputed = df_imputed[df_imputed.external_clicks.notna()]
 
@@ -104,6 +104,17 @@ df_imputed = df_imputed[df_imputed.external_clicks.notna()]
 # df_imputed = df_imputed[~df_imputed.page_id.isin(page_ids_to_drop)]
 # 
 # ----------------------------------------------------------
+
+### Dropping the articles which are not online anymore
+# See Scraping-katja.ipynb for details
+
+pages_404 = [109810, 1010136, 1011007, 1011358, 1011681, 1011848, 1012126, 
+             1012294, 1012530, 1012692, 1012991, 1013220, 1013432, 1013490, 
+             1013520, 1013576, 1013695, 1013698, 1013819, 1014484, 1014556, 
+             1014606, 1014964, 1015588, 1015664, 1015669, 1015676, 1016128, 
+             1016267, 1016492, 1016854, 1017051, 1017067, 1017564, 1018536]
+
+df_imputed = df_imputed[~df_imputed.page_id.isin(pages_404)]
 
 ### Rearranging the columns in a nice order ###
 
