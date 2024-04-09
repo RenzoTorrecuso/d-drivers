@@ -9,7 +9,7 @@ print('======== This script scrapes SEO relevant data from downloaded html files
 i=0
 
 # Path to the folder containing HTML files
-folder_path = '../data/pages'
+folder_path = 'data/pages'
 
 # Initialize a list to hold the scraped data
 scraped_data = []
@@ -107,9 +107,9 @@ scraped_df['page_img_size'] = scraped_df['page_img_size'].apply(lambda x: x.spli
 # Reorder columns
 scraped_df = scraped_df[['page_id','url','h1','author','date_scraped','abstract','main_text_length','meta_title','meta_description','meta_image_url','media_type','page_img_size']]
 
-print('Saving final csv as ../data/df_scraped.csv')
+print('Saving final csv as data/df_scraped.csv')
 
 # Write the DataFrame to a CSV file
-scraped_df.to_csv('../data/data_scraped.csv', index=False)
+scraped_df.to_csv('data/data_scraped.csv', index=False)
 
 print('======== Processing complete ========')
