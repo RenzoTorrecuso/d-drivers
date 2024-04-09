@@ -5,14 +5,8 @@ print('======== This script engineers relevant features and merges scraped and p
 
 print('Reading the file...')
 
-df_perf = pd.read_csv('data/df_aggr.csv')
-df_scrape = pd.read_csv('data/df_scraped.csv')
-
-df_perf.drop(['old_index','publish_date_equal_to_date','version_id'], axis=1, inplace=True)
-df_perf = df_perf[['page_version_id','page_id','version_id_new','date', 'publish_date', 'word_count', 'url', 'page_name','title',
-       'classification_product', 'classification_type', 'authors','daily_likes',
-       'daily_dislikes', 'video_play', 'page_impressions', 'clickouts',
-       'external_clicks', 'external_impressions']]
+df_perf = pd.read_csv('data/data_aggr_page_id.csv')
+df_scrape = pd.read_csv('data/data_scraped.csv')
 
 print('Reading complete. \nCreating the features...')
 
@@ -66,22 +60,19 @@ df_feat['merged_url_len'] = df_feat['merged_url'].str.len()
 
 ### Merging ###
 
-merge_keys = ['page_id', 'url']
+merge_keys = ['page_id']
 df_full = pd.merge(left=df_perf,right=df_feat,how='left',on=merge_keys)
 
-df_full = df_full[['page_version_id', 'page_id', 'version_id_new', 'date', 'publish_date',
-       'word_count', 'url', 'page_name', 'title', 'classification_product',
-       'classification_type', 'authors', 'h1', 'author', 'date_scraped',
-       'abstract', 'main_text_length', 'meta_title', 'meta_description',
-       'meta_image_url', 'media_type', 'page_img_size', 'url_text',
-       'merged_url', 'meta_title_len', 'meta_desc_len', 'h1_len',
-       'abstract_len', 'merged_url_len', 'daily_likes', 'daily_dislikes',
-       'video_play', 'page_impressions', 'clickouts', 'external_clicks',
-       'external_impressions', 'ctr']]
+df_full.drop(['url_text','url_y'],axis=1)
+
+df_full.rename(columns={'url_x':'url',
+                        'author':'scraped_author',
+                        'main_text_length':'scraped_word_count'
+                        }, inplace=True)
 
 ### Writing to the file ###
 print('Writing the final data frame to file...')
-df_full.to_csv('./data/df_features.csv', encoding='utf-8', index=False)
-print('The full dataframe with features is saved as ./data/df_features.csv')
+df_full.to_csv('data/data_features.csv', encoding='utf-8', index=False)
+print('The full dataframe with features is saved as data/df_features.csv')
 
 print('======== Processing complete ========')

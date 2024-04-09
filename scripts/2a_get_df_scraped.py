@@ -76,7 +76,7 @@ for filename in os.listdir(folder_path):
             i+=1
             if i==30:
                 scraped_df = pd.DataFrame(scraped_data)
-                scraped_df.to_csv('../data/temp_scraped.csv')
+                scraped_df.to_csv('data/temp_scraped.csv')
                 i=0
                 print('Scraping progress cached')
 
