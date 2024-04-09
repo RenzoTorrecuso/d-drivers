@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv('../data/merged_data.csv', parse_dates=['date', 'publish_date'])
+df = pd.read_csv('data/merged_data.csv', parse_dates=['date', 'publish_date'])
 
 print('! The end dataframe should have this many rows:', df.drop_duplicates(['page_id', 'date']).shape)
 print('-> The dataframe has this many rows:', df.shape[0])
@@ -163,8 +163,8 @@ else:
         print(f"Lengths don't match by {diff} rows :(")
 print()
 print('Writing to the file...')
-df.to_csv('../data/data_aggr.csv', index=False)
+df.to_csv('data/data_aggr.csv', index=False)
 
-print('Aggregated data saved as "../data/data_aggr.csv" ')
+print('Aggregated data saved as "data/data_aggr.csv" ')
 print()
 print('======== Processing complete ========')

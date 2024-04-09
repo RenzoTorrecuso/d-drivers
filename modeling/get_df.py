@@ -1,8 +1,3 @@
-######################################################
-#                     OUTDATED                       #
-#        Please use merge_source.py instead          #
-######################################################
-
 ## For explanations see ./notebooks/Cleaning-categorising-katja.ipynb
 
 import pandas as pd

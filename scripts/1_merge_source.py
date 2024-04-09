@@ -1,7 +1,6 @@
 ## For explanations see ./notebooks/Cleaning-categorising-katja.ipynb
 
 import pandas as pd
-### from timeit import timeit
 
 # Read part of the malformatted file:
 print('======== This is the script that combines and tidies up the raw data ========')
@@ -9,13 +8,13 @@ print('The run should take approx. 30 seconds.')
 print()
 print('Reading the first data delivery...')
 
-df1 = pd.read_excel('../data/data_d-drivers_2024-03-24.xlsx', sheet_name='data',
+df1 = pd.read_excel('data/data_d-drivers_2024-03-24.xlsx', sheet_name='data',
                     usecols=['PAGE_EFAHRER_ID', 'DATE', 'PAGE_CANONICAL_URL', 'PAGE_AUTHOR', 'WORD_COUNT', 'CLICKOUTS'],
                     #parse_dates=['DATE']
                     )
 print('Reading the second data delivery...')
 #Read everything from the new file:
-df2 = pd.read_excel('../data/data_d-drivers_2024-03-26.xlsx', sheet_name='data',
+df2 = pd.read_excel('data/data_d-drivers_2024-03-26.xlsx', sheet_name='data',
                     #parse_dates=['DATE', 'PUBLISHED_AT']
                     )
 
@@ -95,8 +94,8 @@ df_imputed = df_imputed[['old_index', 'page_id', 'date',
        'video_play', 'page_impressions',
        'clickouts', 'external_clicks', 'external_impressions']]
 
-df_imputed.to_csv('../data/merged_data.csv', encoding='utf-8', index=False)
+df_imputed.to_csv('data/merged_data.csv', encoding='utf-8', index=False)
 
-print('The full dataframe is saved as /data/merged_data.csv')
+print('The full dataframe is saved as data/merged_data.csv')
 
 print('======== Processing complete ========')
