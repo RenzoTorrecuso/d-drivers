@@ -46,8 +46,8 @@ for filename in os.listdir(folder_path):
                 # Extract user-visible data
                 h1 = soup.find('h1').text
                 author = soup.find(id='content').find('article').find('h4').find('a').text
-                date = soup.find(id='content').find('article').find('h4').find('span').get_text(separator=' ', strip=True)
-                abstract = soup.find(id='content').find('article').find('p').text
+                date = soup.find(id='content').find('article').find('h4').find('span')
+                abstract = soup.find(id='content').find('article').find('p').text.get_text(separator=' ', strip=True)
                 # removing line breaks
                 # abstract = 
                 main_article = soup.find('article', class_='single-article')
