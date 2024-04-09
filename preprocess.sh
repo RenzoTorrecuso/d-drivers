@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Updating the requirements..."
+pip install -r requirements_dev.txt
+
 read -p "Do you want to run the scraping script? (type yes ONLY if you do not have data_scraped.csv yet!) (yes/n): " choice
 if [ "$choice" == "yes" ]; then
     python scripts/2a_get_df_scraped.py
