@@ -86,6 +86,27 @@ df_imputed['publish_date'] = df_imputed.groupby(['page_id'])['publish_date'].ffi
 df_imputed['publish_date'] = df_imputed['publish_date'].fillna(pd.Timestamp('2018-01-01 00:00'))
 # df_imputed.loc[df_imputed.publish_date != df_imputed.date] = min(df_imputed.publish_date, df_imputed.date)
 
+### Drop the articles with no metrics at all (enough to check external_clicks)
+### As well as the 
+
+df_imputed = df_imputed[df_imputed.external_clicks.notna()]
+
+# -> Comment the line above and uncomment THIS SNIPPET BELOW 
+# to drop ONLY the articles with no metrics AT ALL #####
+#
+# df_imputed['missing_external'] = df_imputed.external_clicks.isna()
+# page_ids_to_drop = (df_imputed[['page_id', 'missing_external']]\
+#                .groupby('page_id', as_index=False)).all()
+# page_ids_to_drop = page_ids_to_drop[page_ids_to_drop.missing_external].page_id.unique()
+
+# print(f'Dropped {len(page_ids_to_drop)} unique articles')
+# # Should drop 49 articles 
+# df_imputed = df_imputed[~df_imputed.page_id.isin(page_ids_to_drop)]
+# 
+# ----------------------------------------------------------
+
+### Rearranging the columns in a nice order ###
+
 df_imputed = df_imputed[['old_index', 'page_id', 'date', 
        'url', 'publish_date', 'word_count', 
        'classification_product', 'classification_type', 

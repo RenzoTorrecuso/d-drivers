@@ -156,12 +156,21 @@ unique_cols = list(df.columns.drop(still_duplicated))
 
 df = df.drop_duplicates(unique_cols)
 
-diff = df[['page_id', 'date']].shape[0] - 108993
+diff = df[['page_id', 'date']].shape[0] - 108343
 if diff == 0:
         print('The dataframe length is correct!')
 else:
         print(f"Lengths don't match by {diff} rows :(")
 print()
+
+### Rearranging the columns in a nice order ###
+
+df = df[['page_id', 'date', 'version_id', 'url', 'publish_date', 'word_count',
+       'classification_product', 'classification_type', 'page_name',
+        'title', 'authors', 'daily_likes', 'daily_dislikes', 'video_play',
+        'page_impressions', 'clickouts', 
+        'external_clicks', 'external_impressions']]
+
 print('Writing to the file...')
 df.to_csv('data/data_aggr.csv', index=False)
 
