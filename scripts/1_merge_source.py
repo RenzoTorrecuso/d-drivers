@@ -1,16 +1,12 @@
 ## For explanations see ./notebooks/Cleaning-categorising-katja.ipynb
 
 import pandas as pd
-import os
-### from timeit import timeit
 
 # Read part of the malformatted file:
 print('======== This is the script that combines and tidies up the raw data ========')
 print('The run should take approx. 30 seconds.')
 print()
 print('Reading the first data delivery...')
-
-#first_data_path = os.path.join('/', 'data', 'data_d-drivers_2024-03-24.xlsx')
 
 df1 = pd.read_excel('data/data_d-drivers_2024-03-24.xlsx', sheet_name='data',
                     usecols=['PAGE_EFAHRER_ID', 'DATE', 'PAGE_CANONICAL_URL', 'PAGE_AUTHOR', 'WORD_COUNT', 'CLICKOUTS'],
