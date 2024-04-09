@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from bs4 import BeautifulSoup
 import os
+from tqdm import tqdm
 
 print('======== This script scrapes SEO relevant data from downloaded html files ========')
 
@@ -19,8 +20,8 @@ scraped_data = []
 print('Starting the scraping process ...')
 
 # Iterate over HTML files in the folder
-for filename in os.listdir(folder_path):
-    if filename.endswith('.html'):  # Check if the file is an HTML file
+for filename in tqdm(os.listdir(folder_path)):
+    if filename.endswith('.html') and not filename.endswith('index.html'):  # Check if the file is an HTML file
         file_path = os.path.join(folder_path, filename)
         try:
             with open(file_path, 'r', encoding='utf-8') as file:
@@ -76,7 +77,7 @@ for filename in os.listdir(folder_path):
                 })
 
             i+=1
-            if i==30:
+            if i==10000:
                 scraped_df = pd.DataFrame(scraped_data)
                 scraped_df.to_csv('data/temp_scraped.csv')
                 i=0
