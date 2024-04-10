@@ -2,6 +2,25 @@ import pandas as pd
 
 df = pd.read_csv('data/data_aggr.csv', parse_dates=['date', 'publish_date'])
 
+
+def aggregate_strings(url_column):
+    """Collects all string values which have occured for the key 
+    into a string of unique elements separated by ';' """
+
+    # Step 1: Split the strings in each row by the delimiter ';' to get individual elements
+    url_column = url_column.apply(lambda x: x.split(';'))
+    
+    # Step 2: Merge all the lists together
+    all_elements = sum(url_column, [])
+    
+    # Step 3: Remove duplicates
+    unique_elements = list(set(all_elements))
+    
+    # Step 4: Concatenate the unique elements into a single string
+    result = ';'.join(unique_elements)
+    
+    return result
+
 # ------------------------------------------------------------ #
 # Aggregate on page_id level
 # ------------------------------------------------------------ #
@@ -10,7 +29,7 @@ df = df.groupby(['page_id'], as_index=False)\
         .agg(
         {
                 'date':'count',
-                'url':'last',
+                'url':aggregate_strings,
                 'version_id': 'max',
                 'publish_date': 'max',
                 'word_count': 'mean',
@@ -28,6 +47,8 @@ df = df.groupby(['page_id'], as_index=False)\
                 'clickouts': 'sum'
         }
         )
+
+df.insert(3, 'n_urls', df.url.apply(lambda urllist: len(urllist.split(';'))))
 
 # Rename multiple columns
 df.rename(columns={'date': 'n_days', # N observations for the given article
