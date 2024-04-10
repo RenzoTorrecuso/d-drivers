@@ -58,7 +58,7 @@ df.rename(columns={'date': 'n_days', # N observations for the given article
                    'publish_date_max': 'last_publish_date',
                    'authors': 'last_author',
                    'daily_likes': 'likes_n_days', # the current likes and dislikes would make more sense
-                   'daily_dislikes': 'total_likes_n_days', # These two columns make sense only on the daily basis
+                   'daily_dislikes': 'dislikes_n_days', # These two columns make sense only on the daily basis
                    }, inplace=True)                        #           ...should we drop them?
 
 print('Writing to the file...')
