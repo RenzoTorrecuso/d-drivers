@@ -29,9 +29,9 @@ df = df.groupby(['page_id'], as_index=False)\
         .agg(
         {
                 'date':'count',
-                'url':aggregate_strings,
+                'url': aggregate_strings,
                 'version_id': 'max',
-                'publish_date': 'max',
+                'publish_date': ['max', 'min'],
                 'word_count': 'mean',
                 'classification_product': 'first',
                 'classification_type': 'first',
@@ -47,13 +47,15 @@ df = df.groupby(['page_id'], as_index=False)\
                 'clickouts': 'sum'
         }
         )
+df.columns = [col[0] + '_' + col[1] if col[0] == 'publish_date' else col[0] for col in df.columns]
 
 df.insert(3, 'n_urls', df.url.apply(lambda urllist: len(urllist.split(';'))))
+df.insert(5, 'age', (pd.Timestamp('2024-04-01 00:00') - df.publish_date_max).apply(lambda td: td.days))
 
 # Rename multiple columns
 df.rename(columns={'date': 'n_days', # N observations for the given article
                    'version_id': 'no_versions',
-                   'publish_date': 'last_publish_date',
+                   'publish_date_max': 'last_publish_date',
                    'authors': 'last_author',
                    'daily_likes': 'likes_n_days', # the current likes and dislikes would make more sense
                    'daily_dislikes': 'total_likes_n_days', # These two columns make sense only on the daily basis
