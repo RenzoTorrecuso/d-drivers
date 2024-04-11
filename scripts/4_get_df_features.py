@@ -63,7 +63,7 @@ df_feat['merged_url_len'] = df_feat['merged_url'].str.len()
 merge_keys = ['page_id']
 df_full = pd.merge(left=df_perf,right=df_feat,how='left',on=merge_keys)
 
-df_full.drop(['url_text','url_y'],axis=1)
+df_full.drop(['url_text','url_y'],axis=1,inplace=True)
 
 df_full.rename(columns={'url_x':'url',
                         'author':'scraped_author',
