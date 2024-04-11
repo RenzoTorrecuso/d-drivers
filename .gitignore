@@ -130,6 +130,7 @@ dmypy.json
 
 images/
 data/
+google-cloud-sdk/
 models/*.sav
 mlruns
 models/*
