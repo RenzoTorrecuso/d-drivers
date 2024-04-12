@@ -128,6 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+notebooks/*.json
 images/
 data/
 google-cloud-sdk/

@@ -12,7 +12,7 @@ echo "Updating the requirements..."
 pip install -r requirements_dev.txt
 
 choice_scrape=$(read_choice "Do you want to run the scraping script? (Type 'yes' ONLY if you do not have data_scraped.csv yet!)")
-choice_sentiment=$(read_choice "Do you want to run the sentiment analysis script? (Type 'yes' ONLY if you do not have data_nlp.csv yet!)")
+choice_sentiment=$(read_choice "Do you want to run the sentiment analysis over all articles all over again? (Type 'yes' ONLY if you do not have data_nlp.csv yet!)")
 
 if [ "$choice_scrape" == "yes" ]; then
     echo "+++++ Running data scraping script +++++"
@@ -42,4 +42,6 @@ if [ "$choice_sentiment" == "yes" ]; then
     python scripts/5_sentiment_analysis.py
 else
     echo "-----> Skipping sentiment analysis"
+    python scripts/5A_sentiment_merge.py
+
 fi
