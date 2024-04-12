@@ -30,7 +30,7 @@ df.loc[:, 'authors'] = df.authors.str.replace('/', ';')
 df = df.groupby(['page_id'], as_index=False)\
         .agg(
         {
-                'date':'count',
+                'date':['count', 'min', 'max'],
                 'url': aggregate_strings,
                 'version_id': 'max',
                 'publish_date': ['max', 'min'],
@@ -49,14 +49,14 @@ df = df.groupby(['page_id'], as_index=False)\
                 'clickouts': 'sum'
         }
         )
-df.columns = [col[0] + '_' + col[1] if col[0] == 'publish_date' else col[0] for col in df.columns]
+df.columns = [col[0] + '_' + col[1] if col[0] in ['publish_date', 'date'] else col[0] for col in df.columns]
 
 df.insert(3, 'n_urls', df.url.apply(lambda urllist: len(urllist.split(';'))))
 df.insert(5, 'age', (pd.Timestamp('2024-04-01 00:00') - df.publish_date_min).apply(lambda td: td.days))
 df = df.drop('publish_date_min', axis=1)
 
 # Rename multiple columns
-df.rename(columns={'date': 'n_days', # N observations for the given article
+df.rename(columns={'date_count': 'n_days', # N observations for the given article
                    'version_id': 'no_versions',
                    'publish_date_max': 'last_publish_date',
                    'authors': 'author_list',
