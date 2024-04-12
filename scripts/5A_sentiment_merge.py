@@ -2,7 +2,6 @@ import os
 import warnings
 import pandas as pd
 from tqdm import tqdm
-from germansentiment import SentimentModel
 
 df_features = pd.read_csv('data/data_features.csv')
 df_nlp = pd.read_csv('data/data_nlp.csv', usecols=['page_id','sentiment_abstract','confidence_abstract','sentiment_meta_title','confidence_meta_title'])
