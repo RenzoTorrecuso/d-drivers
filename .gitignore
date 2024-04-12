@@ -142,3 +142,7 @@ models/*
 
 # MacOS specific files
 .DS_Store
+
+#Pygwalk
+notebooks/*.json
+notebooks/Archive/*.json
