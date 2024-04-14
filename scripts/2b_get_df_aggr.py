@@ -15,6 +15,8 @@ print('\n Aggregating authors...')
 df_aggr_authors = df[['page_id', 'date', 'publish_date', 'word_count', 'authors']]
 df_aggr_authors.loc[:, 'authors'] = df_aggr_authors.authors.str.replace(' und ', ';')
 df_aggr_authors.loc[:, 'authors'] = df_aggr_authors.authors.str.replace(' & ', ';')
+df_aggr_authors.loc[:, 'authors'] = df_aggr_authors.authors.str.replace(' / ', ';')
+
 
 df_aggr_authors = df_aggr_authors[['page_id', 'date', 'publish_date', 'word_count', 'authors']]\
     .groupby(['page_id', 'date', 'publish_date', 'word_count']) \
