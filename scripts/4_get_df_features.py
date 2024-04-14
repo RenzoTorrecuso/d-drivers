@@ -5,7 +5,7 @@ print('======== This script engineers relevant features and merges scraped and p
 
 print('Reading the file...')
 
-df_perf = pd.read_csv('data/data_aggr_page_id.csv')
+df_perf = pd.read_csv('data/data_aggr_page_id.csv', parse_dates=['date_max', 'date_min'])
 df_scrape = pd.read_csv('data/data_scraped.csv')
 
 print('Reading complete. \nCreating the features...')
@@ -57,6 +57,17 @@ df_feat['abstract_len'] = df_feat['abstract'].str.len()
 
 # URL length
 df_feat['merged_url_len'] = df_feat['merged_url'].str.len()
+
+# Does the title structure "[Intrigue]: [Our take on it]" makes it more clickbait-y?
+df_feat['title_has_colon'] = df_feat['h1'].str.contains(':')
+
+# How often did they tweak the article?
+df_perf['mean_version_lifetime'] = (df_perf['date_max'] - df_perf['date_min']).dt.days / (df_perf.no_versions + 1) 
+# this is almost the inverse
+df_perf['publ_freq'] = (df_perf.no_versions + 1) / ((df_perf['date_max'] - df_perf['date_min']).dt.days + 0.1)
+
+# Targets normalized by n_days:
+df_perf['ext_impr_norm'] = df_perf.external_impressions / df_perf.n_days
 
 ### Merging ###
 
