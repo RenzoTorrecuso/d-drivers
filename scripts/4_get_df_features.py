@@ -7,6 +7,7 @@ print('Reading the file...')
 
 df_perf = pd.read_csv('data/data_aggr_page_id.csv')
 df_scrape = pd.read_csv('data/data_scraped.csv')
+df_clickbait = pd.read_csv('data/clickbait.csv')
 
 print('Reading complete. \nCreating the features...')
 
@@ -60,8 +61,14 @@ df_feat['merged_url_len'] = df_feat['merged_url'].str.len()
 
 ### Merging ###
 
+# Define the merge keys
 merge_keys = ['page_id']
-df_full = pd.merge(left=df_perf,right=df_feat,how='left',on=merge_keys)
+
+# Perform the first merge
+df_full = pd.merge(left=df_perf, right=df_feat, how='left', on=merge_keys)
+
+# Perform the second merge with df_clickbait
+df_full = pd.merge(left=df_full, right=df_clickbait[['label', 'score', 'page_id']], how='left', on=merge_keys)
 
 df_full.drop(['url_text','url_y'],axis=1,inplace=True)
 
