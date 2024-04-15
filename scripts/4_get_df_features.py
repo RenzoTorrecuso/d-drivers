@@ -85,7 +85,9 @@ df_full.drop(['url_text','url_y'],axis=1,inplace=True)
 
 df_full.rename(columns={'url_x':'url',
                         'author':'scraped_author',
-                        'main_text_length':'scraped_word_count'
+                        'main_text_length':'scraped_word_count',
+                        'label': 'clickbait_label',
+                        'score': 'clickbait_score'
                         }, inplace=True)
 
 ### Writing to the file ###
