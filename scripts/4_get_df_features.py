@@ -72,9 +72,6 @@ df_perf['publ_freq'] = (df_perf.no_versions + 1) / ((df_perf['date_max'] - df_pe
 # Targets normalized by n_days:
 df_perf['ext_impr_norm'] = df_perf.external_impressions / df_perf.n_days
 
-# Clean video widget information
-df_video_widget['video_player_types'] = df_video_widget['video_player_types'].str.replace(r'^\d+" - ', '')
-
 ### Merging ###
 
 # Define the merge keys
