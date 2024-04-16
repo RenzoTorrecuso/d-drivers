@@ -98,11 +98,16 @@ df_overview.loc[:, 'const'] = 1
 authors_map = json.load(open('data/codes/authors.json', 'r', encoding='utf-8'))
 authors_map = {key.lower(): value for key, value in authors_map.items()}
 
-df_overview['Author last mask'] = df_overview['Author last'].str.lower()
-df_overview['Author last mask'] = df_overview['Author last mask'].str\
-                                    .replace('/', ',').replace(' & ', ', ').replace(' und ', ', ')
+df_overview['Author last'] = df_overview['Author last'].str.lower()
+df_overview['Author last'] = df_overview['Author last'].str.replace('/', ',')
+df_overview['Author last'] = df_overview['Author last'].str.replace(' & ', ', ')
+df_overview['Author last'] = df_overview['Author last'].str.replace(' und ', ', ')
+
+df_overview['Authors'] = df_overview['Author last'].str.lower()
+df_overview['Authors'] = df_overview['Authors'].str.replace(';', ',')
 
 for auth in authors_map.keys():
-    df_overview['Author last mask'] = df_overview['Author last mask'].str.replace(auth, authors_map[auth.lower()])
+    df_overview['Author last'] = df_overview['Author last'].str.replace(auth, authors_map[auth.lower()])
+    df_overview['Authors'] = df_overview['Authors'].str.replace(auth, authors_map[auth.lower()])
 
 df_overview.to_csv('data/sl_app/eda_total.csv')
