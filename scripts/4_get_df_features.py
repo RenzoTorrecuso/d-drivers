@@ -8,6 +8,7 @@ print('Reading the file...')
 df_perf = pd.read_csv('data/data_aggr_page_id.csv', parse_dates=['date_max', 'date_min'])
 df_scrape = pd.read_csv('data/data_scraped.csv')
 df_clickbait = pd.read_csv('data/clickbait.csv')
+df_trend_match = pd.read_csv('data/data_trends_classified.csv')
 
 print('Reading complete. \nCreating the features...')
 
@@ -81,13 +82,19 @@ df_full = pd.merge(left=df_perf, right=df_feat, how='left', on=merge_keys)
 # Perform the second merge with df_clickbait
 df_full = pd.merge(left=df_full, right=df_clickbait[['label', 'score', 'page_id']], how='left', on=merge_keys)
 
+# Perform the third merge with df_trend_match
+df_full = pd.merge(left=df_full, right=df_trend_match[['predicted_probability', 'predicted_query_label','query_score', 'page_id']], how='left', on=merge_keys)
+
 df_full.drop(['url_text','url_y'],axis=1,inplace=True)
 
 df_full.rename(columns={'url_x':'url',
                         'author':'scraped_author',
                         'main_text_length':'scraped_word_count',
-                        'label': 'clickbait_label',
-                        'score': 'clickbait_score'
+                        'label': 'clickbait_label', 
+                        'score': 'clickbait_prob',
+                        'predicted_probability': 'google_trend_prob',
+                        'predicted_query_label': 'google_trend_label',
+                        'query_score': 'google_trend_score'
                         }, inplace=True)
 
 ### Writing to the file ###
