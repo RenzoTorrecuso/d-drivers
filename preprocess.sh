@@ -7,12 +7,11 @@ function read_choice {
     read -p "$message (yes/no): " choice
     echo $choice
 }
+choice_scrape=$(read_choice "Do you want to run the scraping script? (Type 'yes' ONLY if you do not have data_scraped.csv yet!)")
+choice_sentiment=$(read_choice "Do you want to run the sentiment analysis over all articles all over again? (Type 'yes' ONLY if you do not have data_nlp.csv yet!)")
 
 echo "Updating the requirements..."
 pip install -r requirements_dev.txt
-
-choice_scrape=$(read_choice "Do you want to run the scraping script? (Type 'yes' ONLY if you do not have data_scraped.csv yet!)")
-choice_sentiment=$(read_choice "Do you want to run the sentiment analysis over all articles all over again? (Type 'yes' ONLY if you do not have data_nlp.csv yet!)")
 
 if [ "$choice_scrape" == "yes" ]; then
     echo "+++++ Running data scraping script +++++"
