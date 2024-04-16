@@ -9,6 +9,7 @@ df_perf = pd.read_csv('data/data_aggr_page_id.csv', parse_dates=['date_max', 'da
 df_scrape = pd.read_csv('data/data_scraped.csv')
 df_clickbait = pd.read_csv('data/clickbait.csv')
 df_trend_match = pd.read_csv('data/data_trends_classified.csv')
+df_video_widget = pd.read_csv('data/video_player_types_per_article.csv')
 
 print('Reading complete. \nCreating the features...')
 
@@ -34,7 +35,7 @@ df_scrape['url_text'] = df_scrape['url'].apply(extract_last_part)
 # Sum up all list items per ongoing Version ID and merge with original df
 df_feat = pd.merge(df_scrape, df_scrape.groupby('page_id')['url_text'].apply(lambda x: list(set(sum(x, [])))).reset_index(name='merged_url'), on='page_id', how='left')
 
-#Transform media column
+# Transform media column
 def media_type(df, media_type):
     if 'img-wrapper' in media_type or any(item in media_type for item in ['image-gallery', 'mb-lg-7', 'mb-8']):
         return 'img'
@@ -84,6 +85,9 @@ df_full = pd.merge(left=df_full, right=df_clickbait[['label', 'score', 'page_id'
 
 # Perform the third merge with df_trend_match
 df_full = pd.merge(left=df_full, right=df_trend_match[['predicted_probability', 'predicted_query_label','query_score', 'page_id']], how='left', on=merge_keys)
+
+# Perform the third merge with video widget feature
+df_full = pd.merge(left=df_full, right=df_video_widget[['video_player_types', 'page_id']], how='left', on=merge_keys)
 
 df_full.drop(['url_text','url_y'],axis=1,inplace=True)
 
