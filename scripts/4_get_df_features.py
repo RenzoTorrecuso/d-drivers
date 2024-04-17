@@ -72,6 +72,10 @@ df_perf['publ_freq'] = (df_perf.no_versions + 1) / ((df_perf['date_max'] - df_pe
 # Targets normalized by n_days:
 df_perf['ext_impr_norm'] = df_perf.external_impressions / df_perf.n_days
 
+# number of urls (n_urls by n_ndays an n_urls by age) normalized
+df_perf['urls_per_age'] = df_perf.n_urls / df_perf.age
+df_perf['urls_per_days'] = df_perf.n_urls / df_perf.n_days
+
 ### Merging ###
 
 # Define the merge keys
