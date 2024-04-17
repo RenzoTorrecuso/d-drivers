@@ -42,14 +42,14 @@ df = df.groupby(['page_id'], as_index=False)\
                 'authors': aggregate_strings,
                 'external_clicks': 'sum', 
                 'external_impressions': 'sum',
-                'daily_likes': 'sum',
-                'daily_dislikes': 'sum',
+                'daily_likes': ['sum', 'median'],
+                'daily_dislikes': ['sum', 'median'],
                 'video_play': 'sum',
                 'page_impressions': 'sum',
                 'clickouts': 'sum'
         }
         )
-df.columns = [col[0] + '_' + col[1] if col[0] in ['publish_date', 'date'] else col[0] for col in df.columns]
+df.columns = [col[0] + '_' + col[1] if col[0] in ['publish_date', 'date', 'daily_likes', 'daily_dislikes'] else col[0] for col in df.columns]
 
 df.insert(3, 'n_urls', df.url.apply(lambda urllist: len(urllist.split(';'))))
 df.insert(5, 'age', (pd.Timestamp('2024-04-01 00:00') - df.publish_date_min).apply(lambda td: td.days))
@@ -60,8 +60,11 @@ df.rename(columns={'date_count': 'n_days', # N observations for the given articl
                    'version_id': 'no_versions',
                    'publish_date_max': 'last_publish_date',
                    'authors': 'author_list',
-                   'daily_likes': 'likes_n_days', # the current likes and dislikes would make more sense
-                   'daily_dislikes': 'dislikes_n_days', # These two columns make sense only on the daily basis
+                   'daily_likes_sum': 'total_likes_n_days', # the current likes and dislikes would make more sense
+                   'daily_dislikes_sum': 'total_dislikes_n_days', # These two columns make sense only on the daily basis
+                   #'daily_likes_median': 'daily_likes_median', # the current likes and dislikes would make more sense
+                   #'daily_dislikes_median': 'daily_dislikes_median', # the current likes and dislikes would make more sense
+
                    }, inplace=True)                        #           ...should we drop them?
 
 print('Writing to the file...')

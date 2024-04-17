@@ -80,8 +80,11 @@ merge_keys = ['page_id']
 # Perform the first merge
 df_full = pd.merge(left=df_perf, right=df_feat, how='left', on=merge_keys)
 
+df_clickbait['clickbait_prob'] = df_clickbait['score']
+
+df_clickbait.loc[df_clickbait.label == "Not Clickbait", 'clickbait_prob'] *= -1
 # Perform the second merge with df_clickbait
-df_full = pd.merge(left=df_full, right=df_clickbait[['label', 'score', 'page_id']], how='left', on=merge_keys)
+df_full = pd.merge(left=df_full, right=df_clickbait[['clickbait_prob', 'label', 'score', 'page_id']], how='left', on=merge_keys)
 
 # Perform the third merge with df_trend_match
 df_full = pd.merge(left=df_full, right=df_trend_match[['predicted_probability', 'predicted_query_label','query_score', 'page_id']], how='left', on=merge_keys)
@@ -95,7 +98,7 @@ df_full.rename(columns={'url_x':'url',
                         'author':'scraped_author',
                         'main_text_length':'scraped_word_count',
                         'label': 'clickbait_label', 
-                        'score': 'clickbait_prob',
+                        'score': 'clickbait_prob_raw',
                         'predicted_probability': 'google_trend_prob',
                         'predicted_query_label': 'google_trend_label',
                         'query_score': 'google_trend_score'

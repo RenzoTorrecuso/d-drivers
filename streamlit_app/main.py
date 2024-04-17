@@ -1,8 +1,10 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+st.set_option('deprecation.showPyplotGlobalUse', False)
 # Function to perform basic EDA
 def perform_eda(df):
     # Display the first few rows of the DataFrame
@@ -15,9 +17,13 @@ def perform_eda(df):
 
     # Display correlation heatmap
     st.subheader('Correlation Heatmap')
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(df.corr(), annot=True, cmap='coolwarm', fmt='.2f')
-    st.pyplot()
+    fig = plt.figure(figsize=(12, 10))
+    cmatr = df.select_dtypes(include=['int', 'float']).corr()
+    THRESH = st.slider('Correlation threshold', 0.0, 0.9, 0.5)
+    mask = np.abs(cmatr) > THRESH
+    sns.heatmap(cmatr, annot=True, cmap='coolwarm', fmt='.2f', ax=plt.gca(), mask=-mask)
+    plt.tight_layout()
+    st.pyplot(fig)
 
 # Main function to run the Streamlit app
 def main():
