@@ -4,9 +4,13 @@ from google.cloud import aiplatform
 from google.protobuf import json_format
 from google.protobuf.struct_pb2 import Value
 from sklearn.preprocessing import PowerTransformer
+import pickle
 
 # Initialize PowerTransformer
-pt = PowerTransformer()
+#pt = PowerTransformer()
+file_path_specific = '/Users/clara/Desktop/neuefische/d-drivers/notebooks/power_transformer_ext_impr.pkl'
+with open(file_path_specific, 'rb') as file:
+    loaded_pt = pickle.load(file)
 
 # Function to reverse power transformation
 def reverse_power_transformation(predicted_value, pt):
@@ -14,7 +18,7 @@ def reverse_power_transformation(predicted_value, pt):
     predicted_value_transformed = predicted_value.reshape(-1, 1)
     
     # Inverse transform the predicted value
-    return pt.inverse_transform(predicted_value_transformed)
+    return loaded_pt.inverse_transform(predicted_value_transformed)
 
 
 def predict_tabular_regression_sample(
@@ -86,6 +90,7 @@ title_has_colon_True = st.selectbox("Title has Colon True", ["True", "False"])
 media_type_other = st.selectbox("Media Type Other", ["True", "False"])
 media_type_video = st.selectbox("Media Type Video", ["True", "False"])
 authors = st.text_input("Authors", "lemur")
+YOUR_N_DAYS_VALUE = st.number_input("Expected time the article is online", 100)
 
 # Prepare instance dictionary
 instance_dict = {
@@ -111,16 +116,6 @@ instance_dict = {
     "Authors": authors
 }
 
-# # Button to trigger prediction
-# if st.button("Predict"):
-#     predict_tabular_regression_sample(
-#         project="428691118973",
-#         endpoint_id="1008014668158992384",
-#         instance_dict=instance_dict,
-#         location="europe-north1",
-#         api_endpoint="europe-north1-aiplatform.googleapis.com"
-#     )
-
 # Button to trigger prediction
 if st.button("Predict"):
     response = predict_tabular_regression_sample(
@@ -131,14 +126,15 @@ if st.button("Predict"):
         api_endpoint="europe-north1-aiplatform.googleapis.com"
     )
     
-    # Extract prediction value from the response
-    predicted_value = response.predictions[0]['value']
-    
+    # Extract prediction value from the respoanse
+#    predicted_value = response.predictions[0]['value']
+    predicted_value = response['value']
+
     # Reverse Power Transformation
-    reversed_value_transformed = reverse_power_transformation(predicted_value, pt)
+    reversed_value_transformed = reverse_power_transformation(predicted_value, loaded_pt)
     
     # Reverse Normalization by multiplying through n_days
-    n_days = YOUR_N_DAYS_VALUE  # Replace with your actual n_days value
+    n_days = YOUR_N_DAYS_VALUE 
     reversed_value = reversed_value_transformed * n_days
     
     # Display the reversed value
