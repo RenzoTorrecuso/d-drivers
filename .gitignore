@@ -146,3 +146,4 @@ models/*
 #Pygwalk
 notebooks/*.json
 notebooks/Archive/*.json
+streamlit_app/data/*
