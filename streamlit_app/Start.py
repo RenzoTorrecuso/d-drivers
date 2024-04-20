@@ -36,7 +36,7 @@ option = st.selectbox(
 
 # Filter dataframe based on selected feature
 #df_filtered = df[option]
-df_filtered = df['external_impressions']
+df_filtered = df[option]
 
 # Line chart
 chart = alt.Chart(df).mark_line().encode(
@@ -57,9 +57,3 @@ chart = alt.Chart(df).mark_line().encode(
 col1, col2, col3 = st.columns([1, 3, 1])
 with col2:
     st.write(chart)
-
-# Add a button to redirect to the Prediction page
-col1, col2, col3 = st.columns([1, 1, 1])
-with col2:
-    if st.button("Go to Prediction"):
-        st.query_params(page="Prediction")

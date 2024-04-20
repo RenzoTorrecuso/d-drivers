@@ -149,7 +149,9 @@ if st.button("Predict"):
             st.markdown(f"<h2>Predicted Impressions: {formatted_reversed_value}</h2>", unsafe_allow_html=True)
             st.write(f"Lower Bound: {formatted_lower_bound}")
             st.write(f"Upper Bound: {formatted_upper_bound}")
+            
         else:
             st.write("Incomplete prediction data received.")
+        
     else:
         st.write("No valid predictions received.")
