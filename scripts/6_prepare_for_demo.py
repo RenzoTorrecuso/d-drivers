@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 
-df = pd.read_csv('data/data_nlp_A.csv')
+df = pd.read_csv('./data/data_nlp_A.csv')
 
 print('Preparing data for scatter plots...')
 df_features = df[['page_id', 'external_impressions', 'ctr', 
@@ -25,7 +25,7 @@ df_features.rename({'page_id': "ID",
                     'ctr': "Click-through"}, axis=1, inplace=True)
 df_features.loc[:, 'const'] = 1
 
-df_features.to_csv('data/sl_app/eda_scatters.csv', index=False)
+df_features.to_csv('./data/sl_app/eda_scatters.csv', index=False)
 
 print('Preparing data for broad overview...')
 
@@ -99,7 +99,7 @@ df_overview.loc[:, 'const'] = 1
 
 ### Mask author names
 
-authors_map = json.load(open('data/codes/authors.json', 'r', encoding='utf-8'))
+authors_map = json.load(open('./data/codes/authors.json', 'r', encoding='utf-8'))
 authors_map = {key.lower(): value for key, value in authors_map.items()}
 
 df_overview['Author last'] = df_overview['Author last'].str.lower()
@@ -114,7 +114,7 @@ for auth in authors_map.keys():
     df_overview['Author last'] = df_overview['Author last'].str.replace(auth, authors_map[auth.lower()])
     df_overview['Authors'] = df_overview['Authors'].str.replace(auth, authors_map[auth.lower()])
 
-df_overview.to_csv('data/sl_app/eda_total.csv', index=False)
+df_overview.to_csv('./data/sl_app/eda_total.csv', index=False)
 
 del df
 
@@ -123,7 +123,7 @@ version_user_side_ftrs = ['page_id', 'date', 'version_id', 'publish_date',
         'classification_type', 'classification_product',
        'word_count','daily_likes', 'daily_dislikes', 'video_play', 'page_impressions',
        'external_clicks', 'external_impressions']
-df_history = pd.read_csv('data/data_aggr.csv', parse_dates=['date', 'publish_date'], usecols=version_user_side_ftrs)
+df_history = pd.read_csv('./data/data_aggr.csv', parse_dates=['date', 'publish_date'], usecols=version_user_side_ftrs)
 
 df_history['Click-through'] = df_history.external_clicks / df_history.external_impressions * 100
 
@@ -141,4 +141,5 @@ df_history.rename({'page_id': 'ID',
                    }, axis=1, inplace=True)
 df_history.drop('external_clicks',axis=1, inplace=True)
 
-df_history.to_csv('data/sl_app/dynamics.csv', index=False)
+df_history.to_csv('./data/sl_app/dynamics.csv', index=False)
+print('======== Processing complete ========')
