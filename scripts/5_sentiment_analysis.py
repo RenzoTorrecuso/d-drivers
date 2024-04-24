@@ -4,8 +4,6 @@ import pandas as pd
 from transformers import pipeline
 from tqdm import tqdm
 
-# NOTE THAT AT THE END I INTRODUCE ONE MORE COLUMN 'df_full.sentiment_title'. CHANGE THE LAST LINE FOR 'abstract' OPTION.
-
 df = pd.read_csv('data/data_features.csv')
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # supressing warnings

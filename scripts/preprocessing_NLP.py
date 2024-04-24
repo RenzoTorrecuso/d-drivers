@@ -2,6 +2,7 @@
 print('======= This script prepares the data for natural language processing =======')
 print('Importing necessary libraries and stopwords...')
 import pandas as pd
+import os
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import string
@@ -18,7 +19,10 @@ stop_words = set(stopwords.words('german'))
 #### Reading file #####
 print('Reading the input file...')
 # Read CSV file into a DataFrame
-df = pd.read_csv('./data/data_nlp_A.csv')
+if os.path.exists('./data/data_nlp_A.csv'):
+    df = pd.read_csv('./data/data_nlp_A.csv')
+else:
+    df = pd.read_csv('./data/data_nlp.csv')  # Reading alternative file
 
 #### Scaling ####
 print('Scaling target variables with Power Transformer ...')

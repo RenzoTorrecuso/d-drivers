@@ -1,7 +1,12 @@
 import pandas as pd
+import os
 import json
 
 df = pd.read_csv('./data/data_nlp_A.csv')
+if os.path.exists('./data/data_nlp_A.csv'):
+    df = pd.read_csv('./data/data_nlp_A.csv')
+else:
+    df = pd.read_csv('./data/data_nlp.csv')  # Reading alternative file
 
 print('Preparing data for scatter plots...')
 df_features = df[['page_id', 'external_impressions', 'ctr', 
@@ -134,7 +139,7 @@ df_history.rename({'page_id': 'ID',
                    'word_count': 'Word count',
                    'classification_product': "Topic", 
                    'classification_type': "Type",
-                   'external_impressions': "Page impressions",
+                   'external_impressions': "Feed impressions",
                    'daily_likes': 'Likes per day',
                    'daily_dislikes': 'Dislikes per day',
                    'video_play': "Video plays",

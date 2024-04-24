@@ -31,7 +31,7 @@ st.title("Content base overview")
 
 selected_metric = st.selectbox(
     'Select metric',
-    ('Page impressions', 'Click-through')
+    ('Feed impressions', 'Click-through')
     )
 fig_bar = plot_metric_history(selected_metric, df_dyn)
 fig_bar.update_traces(showlegend=False)
