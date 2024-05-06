@@ -19,3 +19,4 @@ transformers==4.39.3
 nltk
 pytrends
 streamlit_shadcn_ui
+xgboost==2.0.3
