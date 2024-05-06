@@ -9,6 +9,7 @@ function read_choice {
 }
 choice_scrape=$(read_choice "Do you want to run the scraping script? (Type 'yes' ONLY if you do not have data_scraped.csv yet!)")
 choice_sentiment=$(read_choice "Do you want to run the sentiment analysis over all articles all over again? (Type 'yes' ONLY if you do not have data_nlp.csv yet!)")
+choice_trends=$(read_choice "Do you want to run the google trends classification over all articles all over again? (Type 'yes' ONLY if you do not have data_nlp.csv yet!)")
 
 echo "Updating the requirements..."
 pip install -r requirements_dev.txt
@@ -31,6 +32,13 @@ python scripts/2b_get_df_aggr.py
 echo ""
 echo "+++++ Aggregating by page_id +++++"
 python scripts/3_page_id_agg.py
+
+if [ "$choice_trends" == "yes" ]; then
+    echo "+++++ Running google trends classification script +++++"
+    python scripts/3B_trends_classification.py
+else
+    echo "-----> Skipping trends classification"
+fi
 
 echo ""
 echo "+++++ Extracting features +++++"
