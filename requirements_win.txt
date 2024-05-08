@@ -10,18 +10,11 @@ scikit-learn
 seaborn==0.11.2
 statsmodels==0.14.0
 streamlit==1.33.0
-<<<<<<< HEAD:requirements.txt
-streamlit_shadcn_ui
-=======
->>>>>>> main:requirements_dev.txt
 tqdm==4.66.2
 pygwalker
 pytrends
-streamlit_shadcn_ui
 xgboost==2.0.3
 tokenizers==0.19.1
 transformers==4.40.1
-tensorflow-metal==1.0.0
-tensorflow-macos==2.12.0
 pycaret
 streamlit_shadcn_ui
