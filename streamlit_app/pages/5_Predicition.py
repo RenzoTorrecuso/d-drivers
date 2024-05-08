@@ -33,47 +33,6 @@ def reverse_power_transformation(predicted_value, pt):
     return loaded_pt.inverse_transform(predicted_value_transformed)
 
 
-def predict_tabular_regression_sample(
-    project: str,
-    endpoint_id: str,
-    instance_dict: Dict,
-    location: str = "us-central1",
-    api_endpoint: str = "us-central1-aiplatform.googleapis.com",
-) -> List[Dict]:
-    # The AI Platform services require regional API endpoints.
-    client_options = {"api_endpoint": api_endpoint}
-
-    # Initialize client that will be used to create and send requests.
-    client = aiplatform.gapic.PredictionServiceClient(client_options=client_options)
-
-    # Parse the instance dictionary
-    instance = json_format.ParseDict(instance_dict, Value())
-    instances = [instance]
-
-    # Prepare empty parameters
-    parameters_dict = {}
-    parameters = json_format.ParseDict(parameters_dict, Value())
-
-    # Construct the endpoint path
-    endpoint = client.endpoint_path(
-        project=project, location=location, endpoint=endpoint_id
-    )
-
-    try:
-        # Send the prediction request
-        response = client.predict(
-            endpoint=endpoint, instances=instances, parameters=parameters
-        )
-
-        # Extract and return predictions
-        return response.predictions
-
-    except Exception as e:
-        st.write(f"Error during prediction: {e}")
-        st.write(f"Error type: {type(e)}")
-        return []
-
-
 #### Streamlit app ####
 
 st.image("DATA-DRIVEN SEARCH FOR TRAFFIC DRIVERS.png", use_column_width=True)
@@ -152,55 +111,56 @@ instance_dict = {
 }
 
 # Button to trigger prediction
-if st.button("Predict"):
-    predictions = predict_tabular_regression_sample(
-        project="101568381799",
-        endpoint_id="5222247024354656256",
-        instance_dict=instance_dict,
-        location="us-central1",
-        api_endpoint="us-central1-aiplatform.googleapis.com",
-    )
-
-    if predictions:
-        prediction_value = predictions[0].get("value", None)
-        lower_bound = predictions[0].get("lower_bound", None)
-        upper_bound = predictions[0].get("upper_bound", None)
-
-        if (
-            prediction_value is not None
-            and lower_bound is not None
-            and upper_bound is not None
-        ):
-            reversed_value = (
-                reverse_power_transformation(prediction_value, loaded_pt)
-            ) * n_days
-            reversed_lower_bound = (
-                reverse_power_transformation(lower_bound, loaded_pt)
-            ) * n_days
-            reversed_upper_bound = (
-                reverse_power_transformation(upper_bound, loaded_pt)
-            ) * n_days
-
-            # Format numbers without commas and decimals
-            formatted_reversed_value = "{:,.0f}".format(reversed_value[0][0]).replace(
-                ",", ""
-            )
-            formatted_lower_bound = "{:,.0f}".format(
-                reversed_lower_bound.item()
-            ).replace(",", "")
-            formatted_upper_bound = "{:,.0f}".format(
-                reversed_upper_bound.item()
-            ).replace(",", "")
-
-            st.markdown(
-                f"<h2>Predicted Impressions: {formatted_reversed_value}</h2>",
-                unsafe_allow_html=True,
-            )
-            st.write(f"Lower Bound: {formatted_lower_bound}")
-            st.write(f"Upper Bound: {formatted_upper_bound}")
-
-        else:
-            st.write("Incomplete prediction data received.")
-
-    else:
-        st.write("No valid predictions received.")
+# if st.button("Predict"):
+#     predictions = predict_tabular_regression_sample(
+#         project="101568381799",
+#         endpoint_id="5222247024354656256",
+#         instance_dict=instance_dict,
+#         location="us-central1",
+#         api_endpoint="us-central1-aiplatform.googleapis.com",
+#     )
+#
+#     if predictions:
+#         prediction_value = predictions[0].get("value", None)
+#         lower_bound = predictions[0].get("lower_bound", None)
+#         upper_bound = predictions[0].get("upper_bound", None)
+#
+#         if (
+#             prediction_value is not None
+#             and lower_bound is not None
+#             and upper_bound is not None
+#         ):
+#             reversed_value = (
+#                 reverse_power_transformation(prediction_value, loaded_pt)
+#             ) * n_days
+#             reversed_lower_bound = (
+#                 reverse_power_transformation(lower_bound, loaded_pt)
+#             ) * n_days
+#             reversed_upper_bound = (
+#                 reverse_power_transformation(upper_bound, loaded_pt)
+#             ) * n_days
+#
+#             # Format numbers without commas and decimals
+#             formatted_reversed_value = "{:,.0f}".format(reversed_value[0][0]).replace(
+#                 ",", ""
+#             )
+#             formatted_lower_bound = "{:,.0f}".format(
+#                 reversed_lower_bound.item()
+#             ).replace(",", "")
+#             formatted_upper_bound = "{:,.0f}".format(
+#                 reversed_upper_bound.item()
+#             ).replace(",", "")
+#
+#             st.markdown(
+#                 f"<h2>Predicted Impressions: {formatted_reversed_value}</h2>",
+#                 unsafe_allow_html=True,
+#             )
+#             st.write(f"Lower Bound: {formatted_lower_bound}")
+#             st.write(f"Upper Bound: {formatted_upper_bound}")
+#
+#         else:
+#             st.write("Incomplete prediction data received.")
+#
+#     else:
+#         st.write("No valid predictions received.")
+#
