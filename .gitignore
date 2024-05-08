@@ -137,7 +137,6 @@ mlruns
 models/*
 .code-workspace
 tf-saved-model/
-final_model_vertex/
 
 #config file has sensitive data
 .mlflow_uri
