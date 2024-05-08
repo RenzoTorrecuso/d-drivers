@@ -68,6 +68,12 @@ The reported period is 01.01.2023 - 23.03.2024.</p>
 # Internal
 ## Setup
 
+make sure [libomp](https://formulae.brew.sh/formula/libomp) is installed.
+
+```BASH
+$ brew install libomp
+```
+
 Use the requirements file in this repo to create a new environment.
 
 ```BASH
