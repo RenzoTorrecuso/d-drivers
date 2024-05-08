@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 notebooks/*.json
-images/
+###################### images/
 data/
 google-cloud-sdk/
 models/*.sav
