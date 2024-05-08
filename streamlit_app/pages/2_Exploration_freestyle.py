@@ -31,16 +31,16 @@ mode = st.selectbox('Select exploration mode',
     ('Overview', 'Details', 'Page by page dynamics', 'Freestyle'))
 
 if mode == 'Overview':
-    data_path = './data/eda_total.csv'
+    data_path = '../data/eda_total.csv'
     spec_path = "./pages/pyg_specs/summary.json"
 elif mode == 'Details':
-    data_path = './data/eda_scatters.csv'
+    data_path = '../data/eda_scatters.csv'
     spec_path = "./pages/pyg_specs/eda_features_sl.json"
 elif mode == 'Page by page dynamics':
-    data_path = './data/dynamics.csv'
+    data_path = '../data/dynamics.csv'
     spec_path = "./pages/pyg_specs/history.json"
 else:
-    data_path = './data/data_nlp_A.csv'
+    data_path = '../data/data_nlp_A.csv'
     spec_path = './pages/pyg_specs/empty.json'
  
 renderer = get_pyg_renderer(data_path, spec_path)
