@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # Initialize PowerTransformer
-file_path_specific = '/Users/clara/Desktop/neuefische/d-drivers/notebooks/power_transformer_ext_impr.pkl'
+file_path_specific = './pages/power_transformer_ext_impr.pkl'
 with open(file_path_specific, 'rb') as file:
     loaded_pt = pickle.load(file)
 
@@ -74,40 +74,13 @@ def predict_tabular_regression_sample(
 
 #### Streamlit app ####
 
-st.image("/Users/clara/Desktop/neuefische/d-drivers/streamlit_app/DATA-DRIVEN SEARCH FOR TRAFFIC DRIVERS.png", use_column_width=True)
+st.image("DATA-DRIVEN SEARCH FOR TRAFFIC DRIVERS.png", use_column_width=True)
 st.title("Prediciton of Article Impressions")
 
 # Text areas for Title, Abstract, and Article
-title_text = st.text_input("Title", "Aldi-Rückfahrkamera für jedes Auto: Knallerpreis und schnelle Installation")
-abstract_text = st.text_area("Abstract", """Autofahren ohne Rückfahrkamera können sich die meisten schon gar nicht mehr vorstellen. Schließlich besitzt so gut wie jedes neue Auto dieses fest verbaute Hilfsmittel. Wer dennoch ohne Rückfahrkamera fährt, für den bietet Aldi eine praktische Lösung: eine leicht montierbare Kamera mit Solarpanel.
-
-EFAHRER.com informiert Sie laufend über die besten Deals für E-Autos, Förderung, Laden & Co.""")
-article_text = st.text_area("Article", """Die Rückfahrkamera RC-300WS eignet sich nicht nur für Pkw, sondern laut Hersteller auch für Lkw, Wohnmobile, Wohnwägen und Anhänger. Dabei soll die Installation kinderleicht sein. Ein Bohren sei dafür nicht notwendig. Lediglich einen Schraubenzieher sollte man zur Hand haben. Im Lieferumfang ist ein Monitor, ein USB-Ladeanschluss, Befestigungsmaterial sowie ein Nummernschildhalter mit Kamera, Akku und Solarpanel enthalten. Denn das Besondere an der Rückfahrkamera ist, dass das eingebaute Solarpanel für die Stromversorgung der Kamera am Heck sorgt.
-
-Im Onlineshop gibt es die Rückfahrkamera RC-300 WS mit Solarpanel zum Schnäppchenpreis von für 134 Euro.
-Fakten zum Deal:
-Marke: Maginon
-Aktionspreis: 134 Euro (199 Euro UVP)
-Akku: 2.100 mAh Li-Polymer
-Schutzklasse: IP 67
-Funkreichweite: ca. 17 Meter
-Einfache Installation
-Garantie: 3 Jahre
-Lieferzeit: 1 bis 4 Werktage
-Versandkosten: 5,95 Euro
-Kostenloser Rückversand
-So funktioniert die Rückfahrkamera mit Solarpanel
-In einem kurzen Video zeigt der Hersteller, wie die Rückfahrkamera RC-300WS mit Solarpanelmontiert wird. Dafür muss der Fahrer lediglich die bisherige Nummernschildhalterung abschrauben und die neue Halterung anschrauben. Anschließend wird das Nummernschild entsprechend in der neuen Halterung platziert. Die Kamera kommuniziert über Funk mit dem Monitor im Fahrzeuginneren, sodass keine Kabel verlegt werden müssen.
-
-Der Monitor wird mithilfe des mitgelieferten Saugnapfs an der Windschutzscheibe befestigt. Die Stromversorgung des Displays übernimmt ein Netzteil, dass über den Zigarettenanzünder verbunden wird. Beim Einschalten des Bildschirms kann der Fahrer jetzt genau sehen, was hinter ihm passiert. Probleme beim Einparken und Rangieren sollten mit diesem Gadget schon bald der Vergangenheit angehören.
-
-Für die Stromversorgung der Kamera selbst sind zwei kleine Solarpanels zuständig. Die befinden sich neben der Kamera im Rand der Nummernschildhalterung. Bei Sonnenschein laden die Module den eingebauten Akku auf und sorgen so dafür, dass die Kamera funktioniert.
-
-Fazit: Einfache Installation sorgt für mehr Sicherheit
-Die Rückfahrkamera RC-300WS ist vielseitig einsetzbar und lässt sich im Handumdrehen installieren. Durch das eingebaute Solarmodul mit Akku benötigt die Kamera keinen zusätzlichen Strom des Fahrzeugs, sondern läuft autonom.
-
-Die kabellose Verbindung zwischen Kamera und Monitor erfordert zudem keine zusätzlichen Kabel. Wer eine Rückfahrkamera für seinen Pkw, Wohnwagen oder Anhänger sucht, kann hier nicht viel falsch machen. Einziges Manko: Vergleichbare Modelle gibt es auch von anderen Anbietern zu einem deutlich günstigeren Preis. Beispielsweise die solarbetriebene Rückfahrkamera von AEG für 89 Euro.
-""")
+title_text = st.text_input("Title", "Your Title Here")
+abstract_text = st.text_area("Abstract", "Your Abstract Here")
+article_text = st.text_area("Article", "Your Article Here")
 
 # Input features
 classification_product = st.selectbox("Classification Product", ['E-Auto', 'Auto', 'Zubehör', 'Motorrad', 'Energie', 'Verkehr','Wallbox/Laden', 'Solaranlagen', 'E-Bike', 'Fahrrad', 'E-Scooter','Solarspeicher', 'Balkonkraftwerk', 'Solargenerator', 'THG','Wärmepumpe', 'Versicherung'])
