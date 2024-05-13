@@ -134,7 +134,6 @@ data/
 google-cloud-sdk/
 models/*.sav
 mlruns
-models/*
 .code-workspace
 
 #config file has sensitive data

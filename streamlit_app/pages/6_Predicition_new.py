@@ -3,7 +3,7 @@ from typing import Dict
 
 
 from sklearn.preprocessing import PowerTransformer
-# import pickle
+import pickle
 from typing import Dict, List
 
 # Set page title and favicon
@@ -13,33 +13,35 @@ st.set_page_config(
     layout="wide",
 )
 
-# # Initialize PowerTransformer
-# file_path_specific = "./pages/power_transformer_ext_impr.pkl"
-# with open(file_path_specific, "rb") as file:
-#     loaded_pt = pickle.load(file)
+# Initialize PowerTransformer
+file_path_pt = "./pages/power_transformer_ext_impr.pkl"
+with open(file_path_pt, "rb") as file:
+    loaded_pt = pickle.load(file)
+
+# Initialize Light Gradient Boost Machine model
+file_path_model = "../streamlit_app/pages/lightgbm_tuned_ext_imp_pt.pkl"
+with open(file_path_model, "rb") as file:
+    loaded_model = pickle.load(file)
 
 
-# def reverse_power_transformation(predicted_value, pt):
-#     if isinstance(predicted_value, float):
-#         # Reshape the predicted value for inverse transformation
-#         predicted_value_transformed = [[predicted_value]]
-#     else:
-#         # Reshape the predicted value for inverse transformation
-#         predicted_value_transformed = predicted_value.reshape(-1, 1)
+def inverse_transform(predicted_value, pt):
+    if isinstance(predicted_value, float):
+        # Reshape the predicted value for inverse transformation
+        predicted_value_transformed = [[predicted_value]]
+    else:
+        # Reshape the predicted value for inverse transformation
+        predicted_value_transformed = predicted_value.reshape(-1, 1)
 
-#     # Inverse transform the predicted value
-#     return loaded_pt.inverse_transform(predicted_value_transformed)
+    # Inverse transform the predicted value
+    return loaded_pt.inverse_transform(predicted_value_transformed)
 
 
-def predict_tabular_regression_sample(
-    project: str,
-    endpoint_id: str,
-    instance_dict: Dict,
-    location: str = "us-central1",
-    api_endpoint: str = "us-central1-aiplatform.googleapis.com",
-) -> List[Dict]:
-
-    return True
+def predict_ext_imp(X, model_predict, model_transform): 
+    # predict
+    y = predict_model(model_predict, data=X)
+    # inverse transform
+    y_transformed = inverse_transform(y, model_transform)
+    return y_transformed
 
 #### Streamlit app ####
 
@@ -129,7 +131,7 @@ if st.button("Predict"):
     )
 
     if predictions:
-        prediction_value = 10000
+        prediction_value = reverse_power_transformation('<to be added>', loaded_pt)
         lower_bound = 8000
         upper_bound = 12000
 
