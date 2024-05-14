@@ -29,7 +29,7 @@ end = st.date_input("Select the end date", "today")
 # st.write(start)
 # st.write(end)
 
-term_in = st.text_input(label="Enter the terms (separate by comma)", value="E-Auto, Auto kaufen")
+term_in = st.text_input(label="Enter the terms (separate by comma)", value="E-Auto")
 #timeframe = '2023-01-01 2024-03-23'  # custom date range works but the retured values are binned week-wise
 timeframe = f'{start} {end}'
 

@@ -1,12 +1,8 @@
 import pandas as pd
 import streamlit as st
 import streamlit_shadcn_ui as ui
-from sklearn.preprocessing import PowerTransformer
 import pickle
 import pycaret.regression as pyreg
-
-from typing import Dict, List
-
 
 
 # Initialize PowerTransformer
@@ -15,12 +11,7 @@ with open(file_path_pt, "rb") as file:
     loaded_pt = pickle.load(file)
 
 # Initialize Light Gradient Boost Machine model
-model_loaded = pyreg.load_model('../models/lightgbm_tuned_ext_imp_pt')
-
-# # Initialize Light Gradient Boost Machine model
-# file_path_model = "../streamlit_app/pages/lightgbm_tuned_ext_imp_pt.pkl"
-# with open(file_path_model, "rb") as file:
-#     loaded_model = pickle.load(file)
+model_loaded = pyreg.load_model('./pages/lightgbm_tuned_ext_imp_pt')
 
 def inverse_transform(predicted_value, pt):
     if isinstance(predicted_value, float):
@@ -57,13 +48,11 @@ def load_samples(i=0, n_rows=100):
         'google_trend_score',
         'author_list',
         'urls_per_days',
-        'classification_product', # not needed for most recent model
+        'classification_product', 
         'classification_type'
     ]
     df_sample = df[selected_columns].iloc[i]
-    
     return df_sample
-    #df_sample.h1
 
 def insert_samples(df):
     st.session_state.session_title_text = df.h1
@@ -84,6 +73,7 @@ st.title("Prediciton of Article Impressions")
 
 # Initialize the text_input box with a default value if not already initialized
 # If-clause prevents to load defaults whenever session refreshes
+# step needed for later manipulating values of ui controls
 if "h1" not in st.session_state:
     st.session_state.h1 = "Your Title Here"
 if "abstract" not in st.session_state:
@@ -160,12 +150,13 @@ with cols[1]:
 # Section for Authors and URLs per days
 cols = st.columns(2)
 with cols[0]:
-    author_list = st.selectbox(
-        "Author(s)",
-        ["Eva Goldschald", "Moritz Diethelm", "Marius Eichfelder", "Christian Lutz", "Lisa Brack", "Christian Lutz", "Sebastian Barsch;Christian Lutz", "Carina Dietze", "Vanessa Finkler"], key='author_list')
+    author_list = st.text_input("Author(s)", st.session_state.author_list, key='author_list')
+    # author_list_2 = st.selectbox(
+    #     "Author(s)",
+    #     ["Eva Goldschald", "Moritz Diethelm", "Marius Eichfelder", "Christian Lutz", "Lisa Brack", "Christian Lutz", "Sebastian Barsch;Christian Lutz", "Carina Dietze", "Vanessa Finkler"], key='author_list_2')
 with cols[1]:
     urls_per_days = st.slider(
-        "Publishing Frequency", min_value=0.0, max_value=2.0, step=0.01, key='urls_per_days')
+        "Publishing Frequency", min_value=0.01, max_value=2.0, step=0.01, key='urls_per_days')
 
 # Section for media types
 cols = st.columns(2)    
@@ -177,8 +168,6 @@ with cols[1]:
         video_widget = st.radio("Video type", ["1 - Standard", "2 - Standard and Widget", "3 - Widget"])
     else:
         video_widget = "False"
-# n_days = st.slider("Expected time the article is online",0,20)
-n_days = 15  # mean of n_days
 
 cols = st.columns(2)
 
@@ -226,4 +215,5 @@ if st.button("Predict"):
 
 t1 = 'Prediction based on these independent variables (features):'
 
-instance_dict
+with st.expander('See input variables for model'):
+    instance_dict
