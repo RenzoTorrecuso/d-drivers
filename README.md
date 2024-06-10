@@ -97,7 +97,7 @@ The `requirements.txt` file contains the libraries needed for deployment. of mod
     - `data/video_players_types_per_article.csv` (to be re-created for new raw data)
     - `data/related_queries.csv` (to be re-created for new raw data)
     - `data/preprocessing_nlp_v4.csv` 
-    - `data/codes/authors.json`(for anonymization)
+    - `data/authors.json`(for anonymization)
 
 
 

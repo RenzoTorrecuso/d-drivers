@@ -16,57 +16,64 @@ choice_sentiment=$(read_choice "Do you want to run the sentiment analysis over a
 # pip install -r requirements_dev.txt
 
 if [ "$choice_scrape" == "yes" ]; then
-    echo "+++++ Running data scraping script +++++"
+    echo "+++++ Running data scraping script 01_get_df_scraped+++++"
     python scripts/01_get_df_scraped.py
+    echo ""
 else
     echo "-----> Skipping data scraping"
+    echo ""
 fi
 
 if [ "$choice_clickbait" == "yes" ]; then
-    echo "+++++ Running data clickbait script +++++"
+    echo "+++++ Running data clickbait script 02_clickbait_classification+++++"
     python scripts/02_clickbait_classification.py
+    echo ""
 else
     echo "-----> Skipping clickbait script"
 fi
 
 echo ""
-echo "+++++ Combining data deliveries +++++"
+echo "+++++ Combining data deliveries 11_merge_source +++++"
 python scripts/11_merge_source.py
 
 echo ""
-echo "+++++ Aggregating by page_id and date +++++"
+echo "+++++ Aggregating by page_id and date 12_get_df_aggr +++++"
 python scripts/12_get_df_aggr.py
 
 echo ""
-echo "+++++ Aggregating by page_id +++++"
+echo "+++++ Aggregating by page_id 13_page_id_agg +++++"
 python scripts/13_page_id_agg.py
 
 echo ""
-echo "+++++ Extracting features +++++"
+echo "+++++ Extracting features 20_get_df_features +++++"
 python scripts/20_get_df_features.py
 
 if [ "$choice_trends" == "yes" ]; then
-    echo "+++++ Running google trends classification script (this can take many hours if not executed with hardware accelleration like google colab T4+++++"
+    echo "+++++ Running google trends classification script 30_trends_classification (this can take many hours if not executed with hardware accelleration like google colab T4+++++"
     python scripts/30_trends_classification.py
+    echo ""
 else
     echo "-----> Skipping trends classification"
 fi
 
 echo ""
-echo "+++++ Adding google trends to features +++++"
+echo "+++++ Adding google trends to features 31_trends_merge +++++"
 python scripts/31_trends_merge.py
 
 if [ "$choice_sentiment" == "yes" ]; then
-    echo "+++++ Running sentiment analysis script +++++"
+    echo "+++++ Running sentiment analysis script 40_sentiment_analysis +++++"
     python scripts/40_sentiment_analysis.py
+    echo ""
 else
     echo "-----> Skipping sentiment analysis"
 fi
 
 echo ""
-echo "+++++ Adding sentiment to features +++++"
+echo "+++++ Adding sentiment to features 41_sentiment_merge +++++"
 python scripts/41_sentiment_merge.py
+echo ""
 
 echo ""
-echo "+++++ Prettifying the data segments for the D-Drivers Data App +++++"
+echo "+++++ Prettifying the data segments for the D-Drivers Data App 50_prepare_for_demo +++++"
 python scripts/50_prepare_for_demo.py
+echo ""

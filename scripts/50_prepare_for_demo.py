@@ -8,6 +8,9 @@ if os.path.exists('./data/data_nlp_A.csv'):
 else:
     df = pd.read_csv('./data/data_nlp.csv')  # Reading alternative file
 
+if not os.path.exists('data/sl_app'):
+        os.makedirs('data/sl_app')
+
 print('Preparing data for scatter plots...')
 df_features = df[['page_id', 'external_impressions', 'ctr', 
                   'video_player_types', 'media_type', 'meta_title', 
@@ -104,7 +107,7 @@ df_overview.loc[:, 'const'] = 1
 
 ### Mask author names
 
-authors_map = json.load(open('./data/codes/authors.json', 'r', encoding='utf-8'))
+authors_map = json.load(open('./data/authors.json', 'r', encoding='utf-8'))
 authors_map = {key.lower(): value for key, value in authors_map.items()}
 
 df_overview['Author last'] = df_overview['Author last'].str.lower()
@@ -145,6 +148,8 @@ df_history.rename({'page_id': 'ID',
                    'video_play': "Video plays",
                    }, axis=1, inplace=True)
 df_history.drop('external_clicks',axis=1, inplace=True)
+
+
 
 df_history.to_csv('./data/sl_app/dynamics.csv', index=False)
 print('======== Processing complete ========')
