@@ -91,14 +91,15 @@ pip install -r requirements.txt
 The `requirements.txt` file contains the libraries needed for deployment. of model or dashboard - thus no jupyter or other libs used during development.
 
 ## Data preprocessing
-1. Have the source tables from the three data deliveries in the `data` folder:
+1. Have the source tables from the four data deliveries in the `data` folder:
     - `data/data_d-drivers_2024-03-24.xlsx`
     - `data/data_d-drivers_2024-03-26.xlsx`
-    - `data/video_players_types_per_article.csv`
-2. Obtain other features with the code from the notebooks:
-    - `data/data_scraped.csv`
-    - `data/clickbait.csv`
-    - `data/data_trends_classified.csv`
+    - `data/video_players_types_per_article.csv` (to be re-created for new raw data)
+    - `data/related_queries.csv` (to be re-created for new raw data)
+    - `data/preprocessing_nlp_v4.csv` 
+    - `data/codes/authors.json`(for anonymization)
+
+
 
 >Unfortunately, nothing will work if you don't have the data
 
@@ -115,3 +116,13 @@ And (in the root directory) run it:
 ```
 
 It will create a bunch of CSVs for all intermediate preprocessing steps
+
+The script will ask you four times if you want to skip individual steps: 
+- **processing of scraped data** (very fast)
+  can be skipped if you already have the corresponding output data `data/data_scraped.csv`
+- **clickbait classification** (takes some minutes)
+  can be skipped if you already have the corresponding output data `data/clickbait.csv` 
+- **google trends classification** (takes many hours without hardware accelleration)
+  can be skipped if you already have the corresponding output data `data/data_trends_classified.csv` 
+- **sentiment analysis** (takes many hours without hardware accelleration)
+  can be skipped if you already have the corresponding output data `data/data_nlp.csv`

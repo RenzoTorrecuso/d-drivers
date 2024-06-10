@@ -1,27 +1,14 @@
-beautifulsoup4==4.12.3
-matplotlib
-# missingno==0.5.2
-# numpy>=1.22,<1.24  # tensorflow-macos dependency: numpy <1.24
-openpyxl==3.1.2
-pandas==2.0.1
-# plotly 
-# plotly-resampler==0.10.0
-nltk==3.8.1
-scikit-learn
-seaborn==0.11.2
-statsmodels==0.14.0
-streamlit==1.33.0
-streamlit_shadcn_ui
-tqdm==4.66.2
-pygwalker
-pytrends
-xgboost==2.0.3
-tokenizers==0.19.1
-transformers==4.40.1
-# tensorflow-metal==1.0.0
-tensorflow-macos==2.12.0
-streamlit_shadcn_ui
-xgboost==2.0.3
+tensorflow
 pycaret
-shap==0.45.1
-explainerdashboard==0.4.7
+transformers
+Xgboost
+Streamlit
+streamlit_shadcn_ui
+pygwalker
+openpyxl
+nltk
+seaborn
+pytrends
+beautifulsoup4
+torch
+shap

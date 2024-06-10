@@ -72,7 +72,7 @@ data = df
 # Initialize the text classification pipeline with the specified model
 print('Apply clickbait classifier ...')
 
-pipe = pipeline("text-classification", model="Stremie/roberta-base-clickbait")
+pipe = pipeline("text-classification", model="Stremie/roberta-base-clickbait", from_pt=True)
 
 def classify_headline(headline):
     """
@@ -96,4 +96,4 @@ data[['label', 'score']] = data['h1'].progress_apply(classify_headline).apply(pd
 # Save the classified data to a new CSV file
 data.to_csv('./data/clickbait.csv', encoding='utf-8', index=False)
 print('File is saved as data/clickbait.csv')
-print('======== Processing complete ========')
+print('======== Processing complete ======== \n')
