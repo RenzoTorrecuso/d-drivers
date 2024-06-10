@@ -10,6 +10,6 @@ nltk
 seaborn
 pytrends
 beautifulsoup4
-torch
+# torch # this breaks prediction in streamlit. either TensorFlow 2.0 or Torch is required. both seem to cause severe problems with no error message
 shap
 tf-keras
