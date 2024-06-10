@@ -178,4 +178,4 @@ df.to_csv('data/data_aggr.csv', index=False)
 
 print('Aggregated data saved as "data/data_aggr.csv" ')
 print()
-print('======== Processing complete ========')
+print('======== Processing complete ======== \n')

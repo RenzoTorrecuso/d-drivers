@@ -8,7 +8,7 @@ print('Reading the file...')
 df_perf = pd.read_csv('data/data_aggr_page_id.csv', parse_dates=['date_max', 'date_min'])
 df_scrape = pd.read_csv('data/data_scraped.csv')
 df_clickbait = pd.read_csv('data/clickbait.csv')
-df_trend_match = pd.read_csv('data/data_trends_classified.csv')
+# df_trend_match = pd.read_csv('data/data_trends_classified.csv')
 df_video_widget = pd.read_csv('data/video_player_types_per_article.csv')
 
 print('Reading complete. \nCreating the features...')
@@ -91,7 +91,7 @@ df_clickbait.loc[df_clickbait.label == "Not Clickbait", 'clickbait_prob'] *= -1
 df_full = pd.merge(left=df_full, right=df_clickbait[['clickbait_prob', 'label', 'score', 'page_id']], how='left', on=merge_keys)
 
 # Perform the third merge with df_trend_match
-df_full = pd.merge(left=df_full, right=df_trend_match[['predicted_probability', 'predicted_query_label','query_score', 'page_id']], how='left', on=merge_keys)
+# df_full = pd.merge(left=df_full, right=df_trend_match[['predicted_probability', 'predicted_query_label','query_score', 'page_id']], how='left', on=merge_keys)
 
 # Perform the third merge with video widget feature
 df_full = pd.merge(left=df_full, right=df_video_widget[['video_player_types', 'page_id']], how='left', on=merge_keys)
@@ -103,9 +103,9 @@ df_full.rename(columns={'url_x':'url',
                         'main_text_length':'scraped_word_count',
                         'label': 'clickbait_label', 
                         'score': 'clickbait_prob_raw',
-                        'predicted_probability': 'google_trend_prob',
-                        'predicted_query_label': 'google_trend_label',
-                        'query_score': 'google_trend_score'
+#                         'predicted_probability': 'google_trend_prob',
+#                         'predicted_query_label': 'google_trend_label',
+#                        'query_score': 'google_trend_score'
                         }, inplace=True)
 
 ### Writing to the file ###

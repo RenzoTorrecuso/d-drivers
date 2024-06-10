@@ -4,7 +4,7 @@ import pandas as pd
 from transformers import pipeline
 from tqdm import tqdm
 
-df = pd.read_csv('data/data_features.csv')
+df = pd.read_csv('data/data_features_gt.csv')
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # supressing warnings
 warnings.filterwarnings("ignore")  

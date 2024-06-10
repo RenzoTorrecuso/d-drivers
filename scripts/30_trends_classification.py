@@ -68,8 +68,8 @@ def trends_classify(filter, df_labels, df_gscore, classifier, limititer=0):
 # 1. Load data for labeling process
 ###################################
 
-file_path_features = '../data/data_features.csv'
-file_path_labels = '../data/related_queries.csv'
+file_path_features = 'data/data_features.csv'
+file_path_labels = 'data/related_queries.csv'
 
 df = pd.read_csv(file_path_features)
 df_labels = pd.read_csv(file_path_labels)
@@ -109,4 +109,4 @@ df_labels = df_labels.rename(columns={'query': 'predicted_query_label', 'value':
 df_gscore_new = df_gscore_out.merge(df_labels, on=['classification_product', 'predicted_query_label'], how='left')
 df_gscore_new = df_gscore_new.drop_duplicates(keep='first')
 
-df_gscore_new.to_csv('../data/google_trends/data_trends_classified.csv', encoding='utf-8', index=False)
+df_gscore_new.to_csv('data/google_trends/data_trends_classified.csv', encoding='utf-8', index=False)

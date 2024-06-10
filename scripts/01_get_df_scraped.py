@@ -113,6 +113,7 @@ scraped_df = scraped_df[['page_id','url','h1','author','date_scraped','abstract'
 print('Saving final csv as data/df_scraped.csv')
 
 # Write the DataFrame to a CSV file
-scraped_df.to_csv('data/data_scraped.csv', index=False, lineterminator='')
+scraped_df.to_csv('
+                  ', index=False, lineterminator='')
 
-print('======== Processing complete ========')
+print('======== Processing complete ======== \n')

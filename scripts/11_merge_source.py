@@ -130,4 +130,4 @@ df_imputed.to_csv('data/merged_data.csv', encoding='utf-8', index=False)
 
 print('The full dataframe is saved as data/merged_data.csv')
 
-print('======== Processing complete ========')
+print('======== Processing complete ======== \n')
