@@ -1,3 +1,14 @@
+Dear Visitor,
+
+The project below was realized as a colaborative final project of the Data Science and Data Anlysis course of Neuefische.
+Please find further informations below.
+
+All best.
+
+Renzo
+
+
+
 ![Project logo](images/banner.png)
 
 # D-Drivers: data-driven serach of traffic drivers | for [EFAHRER.com](https://efahrer.chip.de)
